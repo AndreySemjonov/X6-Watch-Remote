@@ -11,7 +11,9 @@ surfing, but it works for anything where you can't touch the screen.
 > Insta360.** The camera's Bluetooth protocol was worked out independently. Use at
 > your own risk, and check your camera before relying on it.
 
-<!-- SCREENSHOT: main screen while recording (hero image) -->
+<p align="center">
+  <img src="docs/images/x6-watch-on-wrist.jpg" alt="X6 Remote on an Apple Watch Ultra while kitesurfing, showing RECORDING 12:34" width="480">
+</p>
 
 ## Why this app exists
 
@@ -41,7 +43,9 @@ to a sports-tracking app.
 - **Recording time from the camera,** plus **camera battery**, **SD card free
   space** and the **Watch battery** on one screen.
 
-<!-- SCREENSHOT: stopped screen, recording screen, disconnected screen -->
+![The four main screen states: ready, recording, disconnected while reconnecting, and recording under Water Lock](docs/images/x6-watch-screens.jpg)
+
+*Images are illustrations (generated renders), not photos or real screenshots. Values shown are examples.*
 
 ### Hands-free control
 - **Action button** (Apple Watch Ultra) through Shortcuts actions:
@@ -67,8 +71,6 @@ to a sports-tracking app.
 - **Water Lock button** on the main screen while the riding session runs. Hold
   the Digital Crown to unlock, as usual.
 - **Optional status notifications** when another app is on screen.
-
-<!-- SCREENSHOT: settings, riding session screen, Water Lock -->
 
 ### Diagnostics
 - **Last command report** and **Last failed command**: step-by-step record of the
