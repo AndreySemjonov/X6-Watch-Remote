@@ -110,20 +110,38 @@ Download `X6Remote-<version>-unsigned.ipa` from
 sign and install it with a sideloading tool that supports embedded Watch apps.
 The IPA is unsigned; `SHA256SUMS.txt` lets you check the download.
 
-### On Windows
+### On Windows (recommended: iloader fork)
 Most Windows sideloading tools can't install the Watch part of an app. My
 [iloader fork](https://github.com/AndreySemjonov/iloader) can, over USB or Wi-Fi.
-Its automatic renewal covers iPhone-only apps, so with a free Apple account
-reinstall X6 Remote with it every 7 days.
 
-1. Download `iloader.exe` from the fork's
-   [releases](https://github.com/AndreySemjonov/iloader/releases/latest). Windows
-   may show a SmartScreen warning because the exe isn't code-signed.
-2. Sign in with your Apple ID, connect the iPhone by USB and select it.
-3. Install `X6Remote-<version>-unsigned.ipa`. The Watch app is installed on the
-   paired Apple Watch together with the iPhone app.
-4. Optional: press **Set up Wi-Fi** once over USB to reinstall without a cable
-   later.
+1. Download `X6Remote-<version>-unsigned.ipa` from this repository's
+   [Releases](https://github.com/AndreySemjonov/X6-Watch-Remote/releases/latest)
+   and `iloader.exe` from the
+   [iloader fork's releases](https://github.com/AndreySemjonov/iloader/releases/latest).
+   `iloader.exe` needs no installation. Windows may show a SmartScreen warning
+   because it isn't code-signed: choose **More info → Run anyway**.
+2. Connect the iPhone by USB, unlock it and tap **Trust** if asked.
+3. In iloader, sign in with your Apple ID. Tick **Save credentials** if you want
+   to reinstall later without typing the password again.
+4. Select your iPhone in the device list.
+5. Under **Your apps**, open **More installation options → Install once** and
+   choose the X6 Remote IPA. Keep the Watch unlocked and near the iPhone: the
+   Watch app is installed on the paired Watch after the iPhone app.
+6. First install only, on the iPhone:
+   - **Settings → Privacy & Security → Developer Mode**: turn it on and restart.
+   - **Settings → General → VPN & Device Management**: open your Apple ID and
+     tap **Trust**.
+7. First install only, on the Watch: **Settings → Privacy & Security →
+   Developer Mode**, turn it on and restart the Watch.
+
+With a free Apple account the apps stop opening after 7 days. Reinstall with
+**Install once** to renew them; your settings on the Watch are kept. iloader's
+automatic renewal covers iPhone-only apps, so X6 Remote has to be reinstalled
+this way.
+
+**Without a cable next time:** with the iPhone on USB, press **Set up Wi-Fi**
+once. Later, refresh the device list and select the iPhone's **Wi-Fi** entry
+(same Wi-Fi network as the PC) before **Install once**.
 
 The fork is unofficial and not affiliated with the original
 [iloader](https://github.com/nab138/iloader) by nab138.
@@ -141,11 +159,55 @@ The fork is unofficial and not affiliated with the original
 3. Download the unsigned IPA from the finished run.
 4. Sign and install it with a sideloading tool that supports embedded Watch apps.
 
-### Set up the Action button
-1. On the iPhone, open **Shortcuts** and create a shortcut with the action
-   **Open X6 or Toggle Recording**.
-2. In the shortcut's details, turn on **Show on Apple Watch**.
-3. On the Watch: **Settings → Action Button → Shortcut**, then pick it.
+### First launch on the Watch
+1. Switch the camera on and keep it near the Watch.
+2. Open **X6 Remote** on the Watch and allow **Bluetooth**. With one X6 nearby
+   it is found and saved automatically; with several, choose yours under
+   **Settings (gear) → Camera**.
+3. Allow **location** when asked. It is only used for the riding session that
+   keeps the app running next to a sports app; nothing is stored.
+4. Wait for **CONNECTED**, then try START and STOP on the screen.
+
+Watch settings (gear icon on the main screen):
+
+| Setting | What it does |
+|---|---|
+| Camera | Connection status, Reconnect, Find camera, Forget camera |
+| Riding session | Start/end the session, and whether it starts when X6 Remote opens |
+| Touch feedback | A light click when you tap START/STOP |
+| Double Tap starts/stops | Finger double tap presses START/STOP (Series 9 / Ultra 2 and later) |
+| Notifications | Optional status notifications while another app is on screen |
+| Diagnostics | Command reports, optional detailed logging, version |
+
+### Set up the Action button (Apple Watch Ultra)
+The iPhone app only makes X6 Remote's actions available in Shortcuts; the
+camera is always controlled by the Watch.
+
+1. After installing, open **X6 Remote on the iPhone** once so its actions appear
+   in Shortcuts.
+2. On the iPhone, open **Shortcuts → +**. Tap **Add Action**, search for **X6**
+   and choose **Open X6 or Toggle Recording** (recommended). Name the shortcut,
+   for example "X6 Rec".
+3. Open the shortcut's details (ⓘ) and turn on **Show on Apple Watch**.
+4. On the Watch, open the **Shortcuts** app and run "X6 Rec" once from there, to
+   check it synced and to accept any prompt.
+5. On the Watch: **Settings → Action Button → Action → Shortcut**, then choose
+   "X6 Rec".
+
+What the recommended action does:
+
+- If X6 Remote isn't connected, the press opens it and reconnects. Press again
+  once it shows **CONNECTED**.
+- When connected, a press starts recording; the next press stops it. The Watch
+  vibrates when the camera confirms.
+
+Other actions you can use instead: **Toggle X6 Recording**, **Start X6
+Recording**, **Stop X6 Recording** and **Read X6 Recording State** (shows the
+state). Toggle never starts a recording while disconnected, it only queues STOP.
+
+If the actions don't show up in Shortcuts, open the iPhone app again, or restart
+the Watch to force a sync. If a shortcut stops working after reinstalling,
+remove the action from it and add it again.
 
 ## Using it on the water
 
