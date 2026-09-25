@@ -5,6 +5,8 @@ over Bluetooth, reconnects by itself, and can be used in the water with the
 **Action button** and **Water Lock**. Built for kitesurfing, wing foiling and
 surfing, but it works for anything where you can't touch the screen.
 
+[![Support on Ko-fi](https://img.shields.io/badge/Support-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/andreys)
+
 > Independent hobby project. **Not affiliated with, endorsed by or supported by
 > Insta360.** The camera's Bluetooth protocol was worked out independently. Use at
 > your own risk, and check your camera before relying on it.
@@ -140,6 +142,12 @@ Test everything on land first.
   Runs on macOS, Windows and Linux: `swift test --package-path apple/Packages/X6Core`.
 - `apple/verify-mac.sh` / `apple/verify-windows.ps1`: full local checks.
 - `docs/PROTOCOL.md`: what is known about the camera's Bluetooth protocol.
+
+## Support
+
+X6 Remote is free and open source. If it helps you on the water and you'd like
+to say thanks, you can buy me a coffee on **[Ko-fi](https://ko-fi.com/andreys)**.
+Bug reports and pull requests are just as welcome.
 
 ## License
 
