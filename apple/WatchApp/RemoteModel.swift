@@ -28,7 +28,7 @@ import X6Core
     private var commandTrace: CommandTrace
     var commandReport: String { commandTrace.report }
     var failureReport: String { commandTrace.lastFailureReport }
-    static let diagnosticRevision = "watch-battery-19"
+    static let diagnosticRevision = "install-check-20"
     @Published private(set) var telemetry = CameraTelemetryDisplay()
     @Published private(set) var telemetryMessage = "Camera readings have not arrived yet."
     @Published private(set) var waterLocked = false
