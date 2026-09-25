@@ -110,6 +110,24 @@ Download `X6Remote-<version>-unsigned.ipa` from
 sign and install it with a sideloading tool that supports embedded Watch apps.
 The IPA is unsigned; `SHA256SUMS.txt` lets you check the download.
 
+### On Windows
+Most Windows sideloading tools can't install the Watch part of an app. My
+[iloader fork](https://github.com/AndreySemjonov/iloader) can, over USB or Wi-Fi.
+Its automatic renewal covers iPhone-only apps, so with a free Apple account
+reinstall X6 Remote with it every 7 days.
+
+1. Download `iloader.exe` from the fork's
+   [releases](https://github.com/AndreySemjonov/iloader/releases/latest). Windows
+   may show a SmartScreen warning because the exe isn't code-signed.
+2. Sign in with your Apple ID, connect the iPhone by USB and select it.
+3. Install `X6Remote-<version>-unsigned.ipa`. The Watch app is installed on the
+   paired Apple Watch together with the iPhone app.
+4. Optional: press **Set up Wi-Fi** once over USB to reinstall without a cable
+   later.
+
+The fork is unofficial and not affiliated with the original
+[iloader](https://github.com/nab138/iloader) by nab138.
+
 ### With a Mac and Xcode
 1. Install Xcode 26 or later.
 2. Copy `apple/Local.xcconfig.example` to `apple/Local.xcconfig` and enter your
