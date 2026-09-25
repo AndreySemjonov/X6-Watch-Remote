@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+<title>X6 Remote — lens and recording indicator</title>
+<path fill="#122237" d="M0 0h1024v1024H0z"/>
+<circle cx="512" cy="544" r="280" fill="#F2F6FA"/>
+<circle cx="512" cy="544" r="226" fill="#122237"/>
+<circle cx="512" cy="544" r="168" fill="#FF963D"/>
+<circle cx="512" cy="544" r="105" fill="#122237"/>
+<circle cx="512" cy="544" r="55" fill="#F2F6FA"/>
+<circle cx="710" cy="280" r="85" fill="#122237"/>
+<circle cx="710" cy="280" r="48" fill="#FF963D"/>
+<rect x="401" y="182" width="154" height="40" rx="20" fill="#F2F6FA"/>
+</svg>

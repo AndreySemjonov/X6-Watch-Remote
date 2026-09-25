@@ -1,0 +1,6 @@
+// Shared defaults. Copy Local.xcconfig.example to Local.xcconfig (git-ignored)
+// and set your own Apple team and bundle identifiers there.
+X6_PHONE_BUNDLE_IDENTIFIER = com.example.X6Remote
+X6_WATCH_BUNDLE_IDENTIFIER = $(X6_PHONE_BUNDLE_IDENTIFIER).watchapp
+DEVELOPMENT_TEAM =
+#include? "Local.xcconfig"

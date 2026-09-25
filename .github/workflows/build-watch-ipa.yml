@@ -1,0 +1,38 @@
+name: Build X6 Watch IPA
+run-name: X6 unsigned IPA - ${{ github.ref_name }}
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: x6-watch-ipa
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: macos-26
+    timeout-minutes: 20
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Test and build unsigned phone and Watch apps
+        run: bash apple/prepare-ipa.sh
+
+      - name: Upload unsigned IPA and verification files
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: X6Remote-unsigned-${{ github.run_number }}
+          path: |
+            build/ipa/X6Remote-unsigned.ipa
+            build/ipa/build-manifest.json
+          if-no-files-found: error
+          retention-days: 14
+

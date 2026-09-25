@@ -1,0 +1,3 @@
+// Copy to Local.xcconfig (git-ignored) and fill in your own values.
+DEVELOPMENT_TEAM = YOUR_TEAM_ID
+X6_PHONE_BUNDLE_IDENTIFIER = com.yourname.X6Remote

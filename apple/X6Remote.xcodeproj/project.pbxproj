@@ -1,0 +1,476 @@
+// !$*UTF8*$!
+{
+	"classes" = {
+	};
+	"objectVersion" = "60";
+	"archiveVersion" = "1";
+	"objects" = {
+		"8BF729FFE074CAEE622C0292" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "folder.assetcatalog";
+			"path" = "Assets.xcassets";
+			"sourceTree" = "<group>";
+		};
+		"84B5A47BDC645D7CA233B1C7" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "8BF729FFE074CAEE622C0292";
+		};
+		"7EE4B0B01DD508D5079089D8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "8BF729FFE074CAEE622C0292";
+		};
+		"19F479106CE8C3BA8C106518" = {
+			"isa" = "PBXGroup";
+			"sourceTree" = "<group>";
+			"children" = ("4992FCC89C82551B85F2412A", "B79606FB3AFEA5BD1609ED40", "B9E7F2871A3402983868AFC8", "FE8AF06909E55B83E6C48E36", "8BF729FFE074CAEE622C0292");
+		};
+		"06271BAF49532C879AA3C58B" = {
+			"path" = "Info.plist";
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text.plist.xml";
+			"sourceTree" = "<group>";
+		};
+		"E2AA269EB967A8853A258BFA" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = "2147483647";
+			"files" = ("FB839ECA3F3526248F31E8F8");
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"35B1014F135DE9B45529B733" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"CLANG_WARN_SUSPICIOUS_MOVE" = "YES";
+				"SWIFT_STRICT_CONCURRENCY" = "targeted";
+				"CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF" = "YES";
+				"CLANG_WARN__DUPLICATE_METHOD_MATCH" = "YES";
+				"SWIFT_COMPILATION_MODE" = "wholemodule";
+				"CLANG_WARN_INFINITE_RECURSION" = "YES";
+				"DEAD_CODE_STRIPPING" = "YES";
+				"ENABLE_TESTABILITY" = "NO";
+				"CLANG_WARN_BOOL_CONVERSION" = "YES";
+				"CLANG_WARN_UNREACHABLE_CODE" = "YES";
+				"ENABLE_STRICT_OBJC_MSGSEND" = "YES";
+				"CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING" = "YES";
+				"CLANG_WARN_STRICT_PROTOTYPES" = "YES";
+				"CLANG_WARN_ENUM_CONVERSION" = "YES";
+				"GCC_WARN_64_TO_32_BIT_CONVERSION" = "YES";
+				"CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER" = "YES";
+				"STRING_CATALOG_GENERATE_SYMBOLS" = "YES";
+				"SWIFT_VERSION" = "5.0";
+				"GCC_WARN_UNINITIALIZED_AUTOS" = "YES";
+				"CLANG_WARN_EMPTY_BODY" = "YES";
+				"GCC_WARN_ABOUT_RETURN_TYPE" = "YES";
+				"CLANG_WARN_COMMA" = "YES";
+				"GCC_WARN_UNUSED_VARIABLE" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"CLANG_WARN_RANGE_LOOP_ANALYSIS" = "YES";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"GCC_NO_COMMON_BLOCKS" = "YES";
+				"ENABLE_USER_SCRIPT_SANDBOXING" = "YES";
+				"CLANG_WARN_INT_CONVERSION" = "YES";
+				"CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS" = "YES";
+				"CLANG_WARN_CONSTANT_CONVERSION" = "YES";
+				"CLANG_WARN_NON_LITERAL_NULL_CONVERSION" = "YES";
+				"GCC_WARN_UNUSED_FUNCTION" = "YES";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "$(inherited)";
+				"CLANG_WARN_OBJC_LITERAL_CONVERSION" = "YES";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"GCC_WARN_UNDECLARED_SELECTOR" = "YES";
+			};
+			"name" = "Release";
+		};
+		"952548237D7F645F11D1E7B6" = {
+			"baseConfigurationReference" = "B79606FB3AFEA5BD1609ED40";
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@executable_path/Frameworks");
+				"CURRENT_PROJECT_VERSION" = "19";
+				"ASSETCATALOG_COMPILER_APPICON_NAME" = "AppIcon";
+				"MARKETING_VERSION" = "0.1.18";
+				"INFOPLIST_FILE" = "WatchApp/Info.plist";
+				"SKIP_INSTALL" = "NO";
+				"CODE_SIGN_IDENTITY" = "Apple Development";
+				"TARGETED_DEVICE_FAMILY" = "4";
+				"PROVISIONING_PROFILE_SPECIFIER" = "";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"X6_COMPANION_BUNDLE_IDENTIFIER" = "$(X6_PHONE_BUNDLE_IDENTIFIER)";
+				"SUPPORTED_PLATFORMS" = "watchos watchsimulator";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"PRODUCT_NAME" = "$(TARGET_NAME)";
+				"SDKROOT" = "watchos";
+				"SWIFT_EMIT_LOC_STRINGS" = "YES";
+				"WATCHOS_DEPLOYMENT_TARGET" = "26.0";
+				"CLANG_ENABLE_OBJC_WEAK" = "YES";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "$(X6_WATCH_BUNDLE_IDENTIFIER)";
+			};
+			"name" = "Debug";
+		};
+		"CA70B37B47E65977902A27E7" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "C7227462A0B52D8F6797B576";
+		};
+		"A8792157CB4F27FB949C035F" = {
+			"path" = "X6Remote.app";
+			"isa" = "PBXFileReference";
+			"includeInIndex" = "0";
+			"explicitFileType" = "wrapper.application";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"B9E7F2871A3402983868AFC8" = {
+			"isa" = "PBXGroup";
+			"name" = "Products";
+			"children" = ("A8792157CB4F27FB949C035F", "92823E22ACC511AE19D236EA");
+			"sourceTree" = "<group>";
+		};
+		"FE8AF06909E55B83E6C48E36" = {
+			"isa" = "PBXGroup";
+			"children" = ("9C6D601000D9165ECA3A58B6");
+			"path" = "PhoneApp";
+			"sourceTree" = "<group>";
+		};
+		"34A04005BCAF206EEC990BD9" = {
+			"productType" = "com.apple.product-type.application";
+			"productReference" = "A8792157CB4F27FB949C035F";
+			"buildConfigurationList" = "4A807E8A027297B0B93701FB";
+			"packageProductDependencies" = ("F5AE27228AC34400DE4A3768");
+			"productName" = "X6Remote";
+			"isa" = "PBXNativeTarget";
+			"buildPhases" = ("878A52FC5FF6A57D50B7B870", "E2AA269EB967A8853A258BFA", "41D311A605520FC7B8B9A980");
+			"dependencies" = ();
+			"name" = "X6Remote";
+			"buildRules" = ();
+		};
+		"0FDABC22E8DA0A3628125F18" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "1F465095A337F88266BBF6BA";
+		};
+		"C7227462A0B52D8F6797B576" = {
+			"path" = "RecordingIntents.swift";
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"sourceTree" = "<group>";
+		};
+		"E2D3A31BEAA1368FC62DA77A" = {
+			"baseConfigurationReference" = "B79606FB3AFEA5BD1609ED40";
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@executable_path/Frameworks");
+				"CURRENT_PROJECT_VERSION" = "19";
+				"ASSETCATALOG_COMPILER_APPICON_NAME" = "AppIcon";
+				"MARKETING_VERSION" = "0.1.18";
+				"INFOPLIST_FILE" = "WatchApp/Info.plist";
+				"SKIP_INSTALL" = "NO";
+				"CODE_SIGN_IDENTITY" = "Apple Development";
+				"TARGETED_DEVICE_FAMILY" = "4";
+				"PROVISIONING_PROFILE_SPECIFIER" = "";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"X6_COMPANION_BUNDLE_IDENTIFIER" = "$(X6_PHONE_BUNDLE_IDENTIFIER)";
+				"SUPPORTED_PLATFORMS" = "watchos watchsimulator";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"PRODUCT_NAME" = "$(TARGET_NAME)";
+				"SDKROOT" = "watchos";
+				"SWIFT_EMIT_LOC_STRINGS" = "YES";
+				"WATCHOS_DEPLOYMENT_TARGET" = "26.0";
+				"CLANG_ENABLE_OBJC_WEAK" = "YES";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "$(X6_WATCH_BUNDLE_IDENTIFIER)";
+			};
+			"name" = "Release";
+		};
+		"FB839ECA3F3526248F31E8F8" = {
+			"isa" = "PBXBuildFile";
+			"productRef" = "F5AE27228AC34400DE4A3768";
+		};
+		"4992FCC89C82551B85F2412A" = {
+			"path" = "WatchApp";
+			"isa" = "PBXGroup";
+			"children" = ("B8588EEE1A1D0007EDF53282", "B0EBA3BBB37BCA59608D8DE9", "C7227462A0B52D8F6797B576", "001049624B6AD129ABB317B8", "1F465095A337F88266BBF6BA", "06271BAF49532C879AA3C58B");
+			"sourceTree" = "<group>";
+		};
+		"05CC03864C5731B20459F839" = {
+			"isa" = "XCBuildConfiguration";
+			"name" = "Debug";
+			"buildSettings" = {
+				"SDKROOT" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "26.0";
+				"TARGETED_DEVICE_FAMILY" = "1,2";
+				"PRODUCT_NAME" = "$(TARGET_NAME)";
+				"PRODUCT_MODULE_NAME" = "X6Remote";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "$(X6_PHONE_BUNDLE_IDENTIFIER)";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"INFOPLIST_KEY_CFBundleDisplayName" = "X6 Remote";
+				"INFOPLIST_KEY_UILaunchScreen_Generation" = "YES";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation" = "YES";
+				"INFOPLIST_KEY_UISupportedInterfaceOrientations" = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				"CURRENT_PROJECT_VERSION" = "19";
+				"ASSETCATALOG_COMPILER_APPICON_NAME" = "AppIcon";
+				"MARKETING_VERSION" = "0.1.18";
+				"SWIFT_EMIT_LOC_STRINGS" = "YES";
+				"SKIP_INSTALL" = "NO";
+				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@executable_path/Frameworks");
+			};
+			"baseConfigurationReference" = "B79606FB3AFEA5BD1609ED40";
+		};
+		"FD8B972376E5D890E9E8A584" = {
+			"isa" = "PBXCopyFilesBuildPhase";
+			"buildActionMask" = "2147483647";
+			"dstPath" = "$(CONTENTS_FOLDER_PATH)/Watch";
+			"dstSubfolderSpec" = "16";
+			"files" = ("BC88815622AAF519BDAFC4E8");
+			"name" = "Embed Watch Content";
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"B79606FB3AFEA5BD1609ED40" = {
+			"path" = "Config.xcconfig";
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text.xcconfig";
+			"sourceTree" = "<group>";
+		};
+		"3669E875AA3796D3F270F496" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = "2147483647";
+			"files" = ("537F2E2123D74F19B2782F34", "CA70B37B47E65977902A27E7");
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"B4E10CAA9C5E22150B71559C" = {
+			"isa" = "XCConfigurationList";
+			"defaultConfigurationIsVisible" = "0";
+			"defaultConfigurationName" = "Release";
+			"buildConfigurations" = ("488864B3D19480A82F7F1786", "35B1014F135DE9B45529B733");
+		};
+		"BC4A71180870F7945155FBB0" = {
+			"isa" = "XCLocalSwiftPackageReference";
+			"relativePath" = "Packages/X6Core";
+		};
+		"33014CB63AFE7A1C6FF822AD" = {
+			"isa" = "PBXContainerItemProxy";
+			"containerPortal" = "244210E48437B6556980A702";
+			"proxyType" = "1";
+			"remoteGlobalIDString" = "34A04005BCAF206EEC990BD9";
+			"remoteInfo" = "X6Remote";
+		};
+		"6FFBAA22D74A3345B95C98B4" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = "2147483647";
+			"files" = ("7EE4B0B01DD508D5079089D8");
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"D74B51F7F8517ED33F687390" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "C7227462A0B52D8F6797B576";
+		};
+		"244210E48437B6556980A702" = {
+			"buildConfigurationList" = "B4E10CAA9C5E22150B71559C";
+			"packageReferences" = ("BC4A71180870F7945155FBB0");
+			"targets" = ("34A04005BCAF206EEC990BD9", "5CA4DE0D59A5018702AEB1AA");
+			"developmentRegion" = "en";
+			"knownRegions" = ("en", "Base");
+			"isa" = "PBXProject";
+			"compatibilityVersion" = "Xcode 14.0";
+			"productRefGroup" = "B9E7F2871A3402983868AFC8";
+			"projectDirPath" = "";
+			"attributes" = {
+				"LastUpgradeCheck" = "2660";
+				"BuildIndependentTargetsInParallel" = "YES";
+				"TargetAttributes" = {
+					"34A04005BCAF206EEC990BD9" = {
+						"SystemCapabilities" = {
+							"com.apple.BackgroundModes" = {
+								"enabled" = "1";
+							};
+						};
+						"CreatedOnToolsVersion" = "26.0";
+					};
+					"5CA4DE0D59A5018702AEB1AA" = {
+						"CreatedOnToolsVersion" = "26.0";
+					};
+				};
+			};
+			"hasScannedForEncodings" = "0";
+			"projectRoot" = "";
+			"mainGroup" = "19F479106CE8C3BA8C106518";
+		};
+		"B3D3C8F367EDCB5D4B7A0966" = {
+			"isa" = "PBXTargetDependency";
+			"target" = "34A04005BCAF206EEC990BD9";
+			"targetProxy" = "33014CB63AFE7A1C6FF822AD";
+		};
+		"C4134A49379DE9A46CF4C6B0" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = "2147483647";
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"D56BAB4DB6B54D79F16C1B0C" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "B8588EEE1A1D0007EDF53282";
+		};
+		"878A52FC5FF6A57D50B7B870" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = "2147483647";
+			"files" = ("D56BAB4DB6B54D79F16C1B0C", "C0BEE9F1ECBD6B6BB5032707", "D74B51F7F8517ED33F687390", "EA0EA1500E24F5149460B21A", "0FDABC22E8DA0A3628125F18");
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"BC88815622AAF519BDAFC4E8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "A8792157CB4F27FB949C035F";
+			"settings" = {
+				"ATTRIBUTES" = ("RemoveHeadersOnCopy");
+			};
+		};
+		"272E3180B2AAE66F2CC0594C" = {
+			"isa" = "XCBuildConfiguration";
+			"name" = "Release";
+			"buildSettings" = {
+				"SDKROOT" = "iphoneos";
+				"SUPPORTED_PLATFORMS" = "iphoneos iphonesimulator";
+				"IPHONEOS_DEPLOYMENT_TARGET" = "26.0";
+				"TARGETED_DEVICE_FAMILY" = "1,2";
+				"PRODUCT_NAME" = "$(TARGET_NAME)";
+				"PRODUCT_MODULE_NAME" = "X6Remote";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "$(X6_PHONE_BUNDLE_IDENTIFIER)";
+				"CODE_SIGN_STYLE" = "Automatic";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"INFOPLIST_KEY_CFBundleDisplayName" = "X6 Remote";
+				"INFOPLIST_KEY_UILaunchScreen_Generation" = "YES";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation" = "YES";
+				"INFOPLIST_KEY_UISupportedInterfaceOrientations" = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				"CURRENT_PROJECT_VERSION" = "19";
+				"ASSETCATALOG_COMPILER_APPICON_NAME" = "AppIcon";
+				"MARKETING_VERSION" = "0.1.18";
+				"SWIFT_EMIT_LOC_STRINGS" = "YES";
+				"SKIP_INSTALL" = "NO";
+				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@executable_path/Frameworks");
+			};
+			"baseConfigurationReference" = "B79606FB3AFEA5BD1609ED40";
+		};
+		"537F2E2123D74F19B2782F34" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "9C6D601000D9165ECA3A58B6";
+		};
+		"5CA4DE0D59A5018702AEB1AA" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = "FE9ED683A1D4D3123CFE76B5";
+			"buildPhases" = ("3669E875AA3796D3F270F496", "C4134A49379DE9A46CF4C6B0", "6FFBAA22D74A3345B95C98B4", "FD8B972376E5D890E9E8A584");
+			"buildRules" = ();
+			"dependencies" = ("B3D3C8F367EDCB5D4B7A0966");
+			"name" = "X6RemotePhone";
+			"productName" = "X6RemotePhone";
+			"productReference" = "92823E22ACC511AE19D236EA";
+			"productType" = "com.apple.product-type.application";
+		};
+		"41D311A605520FC7B8B9A980" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = "2147483647";
+			"files" = ("84B5A47BDC645D7CA233B1C7");
+			"runOnlyForDeploymentPostprocessing" = "0";
+		};
+		"EA0EA1500E24F5149460B21A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "001049624B6AD129ABB317B8";
+		};
+		"1F465095A337F88266BBF6BA" = {
+			"path" = "X6RemoteApp.swift";
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"sourceTree" = "<group>";
+		};
+		"001049624B6AD129ABB317B8" = {
+			"path" = "RemoteModel.swift";
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"sourceTree" = "<group>";
+		};
+		"488864B3D19480A82F7F1786" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"CLANG_WARN_SUSPICIOUS_MOVE" = "YES";
+				"SWIFT_STRICT_CONCURRENCY" = "targeted";
+				"CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF" = "YES";
+				"CLANG_WARN__DUPLICATE_METHOD_MATCH" = "YES";
+				"CLANG_WARN_INFINITE_RECURSION" = "YES";
+				"DEAD_CODE_STRIPPING" = "YES";
+				"ENABLE_TESTABILITY" = "YES";
+				"CLANG_WARN_BOOL_CONVERSION" = "YES";
+				"CLANG_WARN_UNREACHABLE_CODE" = "YES";
+				"ENABLE_STRICT_OBJC_MSGSEND" = "YES";
+				"CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING" = "YES";
+				"CLANG_WARN_STRICT_PROTOTYPES" = "YES";
+				"CLANG_WARN_ENUM_CONVERSION" = "YES";
+				"GCC_WARN_64_TO_32_BIT_CONVERSION" = "YES";
+				"CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER" = "YES";
+				"STRING_CATALOG_GENERATE_SYMBOLS" = "YES";
+				"SWIFT_VERSION" = "5.0";
+				"GCC_WARN_UNINITIALIZED_AUTOS" = "YES";
+				"CLANG_WARN_EMPTY_BODY" = "YES";
+				"GCC_WARN_ABOUT_RETURN_TYPE" = "YES";
+				"CLANG_WARN_COMMA" = "YES";
+				"GCC_WARN_UNUSED_VARIABLE" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"CLANG_WARN_RANGE_LOOP_ANALYSIS" = "YES";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"GCC_NO_COMMON_BLOCKS" = "YES";
+				"ENABLE_USER_SCRIPT_SANDBOXING" = "YES";
+				"CLANG_WARN_INT_CONVERSION" = "YES";
+				"CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS" = "YES";
+				"CLANG_WARN_CONSTANT_CONVERSION" = "YES";
+				"ONLY_ACTIVE_ARCH" = "YES";
+				"CLANG_WARN_NON_LITERAL_NULL_CONVERSION" = "YES";
+				"GCC_WARN_UNUSED_FUNCTION" = "YES";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "DEBUG $(inherited)";
+				"CLANG_WARN_OBJC_LITERAL_CONVERSION" = "YES";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"GCC_WARN_UNDECLARED_SELECTOR" = "YES";
+			};
+			"name" = "Debug";
+		};
+		"F5AE27228AC34400DE4A3768" = {
+			"isa" = "XCSwiftPackageProductDependency";
+			"package" = "BC4A71180870F7945155FBB0";
+			"productName" = "X6Core";
+		};
+		"92823E22ACC511AE19D236EA" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.application";
+			"path" = "X6RemotePhone.app";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+			"includeInIndex" = "0";
+		};
+		"B0EBA3BBB37BCA59608D8DE9" = {
+			"path" = "RidingSession.swift";
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"sourceTree" = "<group>";
+		};
+		"C0BEE9F1ECBD6B6BB5032707" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "B0EBA3BBB37BCA59608D8DE9";
+		};
+		"B8588EEE1A1D0007EDF53282" = {
+			"path" = "BluetoothCamera.swift";
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"sourceTree" = "<group>";
+		};
+		"FE9ED683A1D4D3123CFE76B5" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = ("05CC03864C5731B20459F839", "272E3180B2AAE66F2CC0594C");
+			"defaultConfigurationIsVisible" = "0";
+			"defaultConfigurationName" = "Release";
+		};
+		"9C6D601000D9165ECA3A58B6" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "X6RemotePhoneApp.swift";
+			"sourceTree" = "<group>";
+		};
+		"4A807E8A027297B0B93701FB" = {
+			"isa" = "XCConfigurationList";
+			"defaultConfigurationIsVisible" = "0";
+			"defaultConfigurationName" = "Release";
+			"buildConfigurations" = ("952548237D7F645F11D1E7B6", "E2D3A31BEAA1368FC62DA77A");
+		};
+	};
+	"rootObject" = "244210E48437B6556980A702";
+}

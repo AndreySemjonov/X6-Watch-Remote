@@ -1,0 +1,9 @@
+.DS_Store
+build/
+artifacts/
+**/.build/
+**/.swiftpm/
+**/DerivedData/
+**/xcuserdata/
+__pycache__/
+apple/Local.xcconfig
