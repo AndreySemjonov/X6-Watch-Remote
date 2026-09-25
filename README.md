@@ -104,6 +104,12 @@ There is no App Store or TestFlight version. You build and install it yourself.
 Apps signed with a free Apple account stop launching after 7 days and must be
 reinstalled; a paid developer account extends this to a year.
 
+### Ready-made IPA
+Download `X6Remote-<version>-unsigned.ipa` from
+[Releases](https://github.com/AndreySemjonov/X6-Watch-Remote/releases/latest), then
+sign and install it with a sideloading tool that supports embedded Watch apps.
+The IPA is unsigned; `SHA256SUMS.txt` lets you check the download.
+
 ### With a Mac and Xcode
 1. Install Xcode 26 or later.
 2. Copy `apple/Local.xcconfig.example` to `apple/Local.xcconfig` and enter your
