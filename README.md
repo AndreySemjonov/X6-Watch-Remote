@@ -108,6 +108,18 @@ Other Insta360 models (X4, X5 …) are **not supported yet**. They may use a
 different message format; see [docs/PROTOCOL.md](docs/PROTOCOL.md). Contributions
 from people with those cameras are welcome.
 
+## Known issues
+
+I'm actively working on these; check the latest release for fixes.
+
+- **After STOP, the camera sometimes stops answering Bluetooth for a while**
+  (seen for 12+ seconds, also on land). The camera does stop recording, but the
+  Watch can't confirm it: it waits, then shows **CHECK STATE** with a failure
+  vibration. The screen returns to normal by itself once the camera answers
+  again. Check the camera if in doubt.
+- Only tested with the X6 (firmware 1.1.7) and Apple Watch Ultra; X4/X5 are not
+  supported.
+
 ## Installing
 
 There is no App Store or TestFlight version. You build and install it yourself.
