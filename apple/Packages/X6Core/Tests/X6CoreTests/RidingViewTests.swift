@@ -20,12 +20,12 @@ final class RidingViewTests: XCTestCase {
     func testTelemetryRequestOnlyAsksForBatteryAndStorage() throws {
         // Independent Python UCD2 encoder yields this same length/checksum/body.
         let packet = try UCD2.encode(.telemetry, id: 1, sequence: 1)
-        XCTAssertEqual(packet.hex, "55434432010c04010d000000080002010000800000080b08143e323dbf")
+        XCTAssertEqual(packet.hex, "55434432010c040110000000080002010000800000080b081408b0011e67cce2")
         var decoder = UCD2Decoder()
         let message = try XCTUnwrap(decoder.feed(packet).first)
         XCTAssertEqual(message.code, 8)
-        XCTAssertEqual(message.body, [0x08, 11, 0x08, 20])
-        XCTAssertEqual(packet.count, 29)
+        XCTAssertEqual(message.body, [0x08, 11, 0x08, 20, 0x08, 0xb0, 0x01])
+        XCTAssertEqual(packet.count, 32)
         for split in 0...packet.count {
             var splitDecoder = UCD2Decoder()
             let result = try splitDecoder.feed(Array(packet.prefix(split))) + splitDecoder.feed(Array(packet.dropFirst(split)))

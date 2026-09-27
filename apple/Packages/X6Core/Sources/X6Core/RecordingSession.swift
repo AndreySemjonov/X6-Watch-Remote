@@ -32,6 +32,10 @@ public enum ControlResult: String, Sendable { case recording, stopped, stopQueue
     /// STOP may finish physically before status reports idle while the camera
     /// saves the clip. START keeps its original eight checks.
     public static let stopConfirmationWindow: TimeInterval = 15
+    /// After a lost START/STOP reply or status read: keep reading state for up to
+    /// this long (and this many reads), within the command's own deadline.
+    public static let recoveryWindow: TimeInterval = 15
+    public static let recoveryAttempts = 30
     /// Where the latest capture attempt reached, for failure summaries, e.g.
     /// "STOP reply". Cleared with clearCaptureStage() at each user command.
     public private(set) var captureStage: String?
@@ -190,16 +194,28 @@ public enum ControlResult: String, Sendable { case recording, stopped, stopQueue
             throw SessionError.notConfirmed
         } catch {
             diagnostic?("capture_unconfirmed desired=\(desired.rawValue) stage=\(stage) error=\(String(reflecting: error))")
-            // Delivery can succeed even when its reply is lost. Make just one
-            // fresh, read-only check on the existing connection. Never repeat
+            // Delivery can succeed even when its reply is lost; the camera can go
+            // silent for a while (underwater, out of range). Keep checking with
+            // read-only status reads on the existing connection, within the
+            // recovery window and the enclosing command deadline. Never repeat
             // START/STOP, reconnect here, or turn an unknown state into success.
-            if (try? CommandDeadline.check()) != nil, link.isReady {
-                diagnostic?("capture_recovery_read desired=\(desired.rawValue)")
+            // A confirmation window that ran out with clear evidence gets one read.
+            let attempts = (error as? SessionError) == .notConfirmed ? 1 : Self.recoveryAttempts
+            let ends = now() + Self.recoveryWindow
+            var attempt = 0
+            while attempt < attempts, attempt == 0 || now() < ends,
+                  (try? CommandDeadline.check()) != nil {
+                if attempt > 0 {
+                    do { try await delay() } catch { break }
+                }
+                attempt += 1
+                guard link.isReady else { continue }
+                diagnostic?("capture_recovery_read desired=\(desired.rawValue) attempt=\(attempt)")
                 do {
                     let snapshot = try await query()
                     if snapshot.recording == desired {
                         captureStage = "\(name) confirmed"
-                        diagnostic?("capture_recovered desired=\(desired.rawValue)")
+                        diagnostic?("capture_recovered desired=\(desired.rawValue) attempt=\(attempt)")
                         confirmed?(result)
                         return result
                     }

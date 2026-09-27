@@ -28,7 +28,7 @@ import X6Core
     private var commandTrace: CommandTrace
     var commandReport: String { commandTrace.report }
     var failureReport: String { commandTrace.lastFailureReport }
-    static let diagnosticRevision = "install-check-20"
+    static let diagnosticRevision = "storage-24"
     @Published private(set) var telemetry = CameraTelemetryDisplay()
     @Published private(set) var telemetryMessage = "Camera readings have not arrived yet."
     @Published private(set) var waterLocked = false
@@ -528,12 +528,11 @@ import X6Core
         let started = ProcessInfo.processInfo.systemUptime
         log("user_action_enter=\(action) ready=\(link.isReady) foreground=\(foreground) refreshing=\(session.isRefreshing) pending_stop=\(session.pendingStop)")
         guard !controlsBusy else {
-            log("user_action_rejected=\(action) intent_users=\(intentUsers) command_busy=\(session.commandBusy)")
-            commandTrace.recordFailure(failureSummary(action, SessionError.busy, elapsed: 0,
-                                                      stage: "rejected: previous command still running"),
-                                       context: recentEvents)
-            saveFailureReport()
-            throw SessionError.busy
+            // A second press while a command runs (often by accident) is ignored:
+            // the running command still finishes and vibrates. Not a failure, so
+            // it neither shows an error nor replaces the last failed report.
+            log("user_action_ignored_busy=\(action) intent_users=\(intentUsers) command_busy=\(session.commandBusy)")
+            return "Already working on the previous press"
         }
         telemetryTask?.cancel()
         session.clearCaptureStage()

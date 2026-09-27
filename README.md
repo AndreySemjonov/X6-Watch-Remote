@@ -40,12 +40,16 @@ to a sports-tracking app.
 - **Automatic reconnection** after the camera goes out of range or underwater.
 - **One large START/STOP button.** Recording is only shown as started or stopped
   after the camera itself confirms it, never just because a button was pressed.
-- **Recording time from the camera,** plus **camera battery**, **SD card free
-  space** and the **Watch battery** on one screen.
+- **Riding screen made for a glance:** the background turns red while recording
+  and orange when something needs attention, with one large state line and the
+  camera's recording time as the biggest number.
+- **Camera battery, free space and Watch battery** in large type below. Free space
+  is for the storage the camera records to, labelled **SD** or **INT** (internal),
+  and any value turns orange when low. Settings → Camera lists every storage.
 
 ![The four main screen states: ready, recording, disconnected while reconnecting, and recording under Water Lock](docs/images/x6-watch-screens.jpg)
 
-*Images are illustrations (generated renders), not photos or real screenshots. Values shown are examples.*
+*Images are illustrations (generated renders) of an earlier screen layout, not photos or real screenshots. Values shown are examples.*
 
 ### Hands-free control
 - **Action button** (Apple Watch Ultra) through Shortcuts actions:
@@ -57,6 +61,12 @@ to a sports-tracking app.
 - **Double Tap** (Apple Watch Series 9 / Ultra 2 and later) presses START/STOP
   while X6 Remote is on screen. Can be turned off in Settings.
 - **Distinct vibrations** for recording started, stopped, STOP queued and failure.
+  The Shortcut never shows an error popup (which can't be dismissed under Water
+  Lock); a failure is signalled by its vibration, with details in Diagnostics.
+- **Accidental second press** while a command is still running is ignored.
+- **Lost replies:** if the camera goes silent right after START/STOP (for example
+  underwater), the Watch keeps checking the camera's state for up to 15 seconds
+  and confirms as soon as it answers. START/STOP are never sent twice.
 - **Queued STOP:** a STOP pressed while the camera is disconnected is sent as soon
   as it reconnects. START is never queued, so a camera never starts recording
   unexpectedly later.

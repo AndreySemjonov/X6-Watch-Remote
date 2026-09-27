@@ -11,16 +11,33 @@ private struct RunOnWatchError: LocalizedError {
     }
 }
 
+#if os(watchOS)
+/// Shortcuts shows a thrown error as a popup that needs a tap to dismiss, which is
+/// impossible under Water Lock. The model already reports a failure with the
+/// failure vibration and the "Last failed command" report, so the shortcut itself
+/// always completes and returns the message instead.
+@MainActor private func withoutErrorAlert(_ work: () async throws -> String) async -> String {
+    do {
+        return try await work()
+    } catch {
+        RemoteModel.shared.log("intent_error_reported_by_haptic \(String(reflecting: error))")
+        return error.localizedDescription
+    }
+}
+#endif
+
 @MainActor private func executeX6Intent(_ action: X6IntentAction) async throws -> String {
     #if os(watchOS)
     let model = RemoteModel.shared
     model.log("intent_enter=\(action)")
     defer { model.log("intent_exit=\(action)") }
-    switch action {
-    case .start: return try await RemoteModel.shared.execute(.start)
-    case .stop: return try await RemoteModel.shared.execute(.stop)
-    case .toggle: return try await RemoteModel.shared.execute(.toggle)
-    case .status: return try await RemoteModel.shared.execute(.status)
+    return await withoutErrorAlert {
+        switch action {
+        case .start: return try await model.execute(.start)
+        case .stop: return try await model.execute(.stop)
+        case .toggle: return try await model.execute(.toggle)
+        case .status: return try await model.execute(.status)
+        }
     }
     #else
     // The phone registers metadata only. Never forward or defer capture commands.
@@ -46,7 +63,7 @@ struct OpenX6AndStartRecording: AppIntent {
     static var supportedModes: IntentModes { .foreground(.immediate) }
     @MainActor func perform() async throws -> some IntentResult {
         #if os(watchOS)
-        _ = try await RemoteModel.shared.executeOpenOrToggle()
+        _ = await withoutErrorAlert { try await RemoteModel.shared.executeOpenOrToggle() }
         #else
         throw RunOnWatchError()
         #endif

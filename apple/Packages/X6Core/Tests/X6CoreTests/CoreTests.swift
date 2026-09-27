@@ -59,7 +59,9 @@ final class CoreTests: XCTestCase {
     var ignoreCapture = false
     var loseCaptureReply = false
     var failStatusCall: Int?
-    private var statusCalls = 0
+    /// Status calls (1-based) that time out, e.g. a camera silent underwater.
+    var failStatusCalls: Set<Int> = []
+    private(set) var statusCalls = 0
     var queryHook: (() -> Void)?
     var waitForQuery: (() async -> Void)?
     var captureHook: (() -> Void)?
@@ -70,7 +72,9 @@ final class CoreTests: XCTestCase {
         if command == .telemetry { return [0x12, 0] }
         if command == .status {
             statusCalls += 1
-            if statusCalls == failStatusCall { throw SimulatedReplyError.timeout }
+            if statusCalls == failStatusCall || failStatusCalls.contains(statusCalls) {
+                throw SimulatedReplyError.timeout
+            }
             queryHook?()
             await waitForQuery?()
             return [0x0a, 6, 8, unknown ? 99 : (recording ? 1 : 0), 0x10, 0, 0x50, 0]
@@ -86,19 +90,45 @@ final class CoreTests: XCTestCase {
 private enum SimulatedReplyError: Error { case timeout }
 
 final class SessionTests: XCTestCase {
-    @MainActor func testLostReplyAndFailedRecoveryReadStayUnknownWithoutRetryLoop() async {
+    @MainActor func testLostReplyThenFailedReadRecoversOnLaterReadOnlyCheck() async throws {
         let link = FakeLink(); link.recording = true
         link.loseCaptureReply = true; link.failStatusCall = 2
         let remote = RecordingSession(link: link, delay: {})
         var confirmations = 0; remote.confirmed = { _ in confirmations += 1 }
-        do { _ = try await remote.stop(); XCTFail("Missing verification must fail") }
-        catch { XCTAssertEqual(error as? SimulatedReplyError, .timeout) }
-        XCTAssertFalse(link.recording)
-        XCTAssertEqual(remote.state, .unknown)
-        XCTAssertEqual(confirmations, 0)
-        XCTAssertEqual(link.calls, [.status, .stop, .status])
+        let result = try await remote.stop()
+        XCTAssertEqual(result, .stopped)
+        XCTAssertEqual(confirmations, 1)
+        XCTAssertEqual(link.calls, [.status, .stop, .status, .status])
         XCTAssertFalse(remote.busy)
         XCTAssertFalse(remote.pendingStop)
+    }
+
+    /// Field trace 2026-09-26: STOP applied, then the camera answered nothing for
+    /// over 12 s. Later read-only checks must confirm STOP without re-sending it.
+    @MainActor func testSilentCameraAfterStopIsConfirmedByLaterReadsWithoutReplay() async throws {
+        let link = FakeLink(); link.recording = true; link.loseCaptureReply = true
+        link.failStatusCalls = Set(2...6)
+        var time = 0.0
+        let remote = RecordingSession(link: link, now: { time }, delay: { time += 0.5 })
+        let result = try await remote.stop()
+        XCTAssertEqual(result, .stopped)
+        XCTAssertEqual(link.calls.filter { $0 == .stop }.count, 1)
+        XCTAssertFalse(link.calls.contains(.start))
+        XCTAssertEqual(link.statusCalls, 7)
+        XCTAssertEqual(remote.captureStage, "STOP confirmed")
+    }
+
+    @MainActor func testSilentCameraGivesUpAfterRecoveryWindowAndStaysUnknown() async {
+        let link = FakeLink(); link.recording = true; link.loseCaptureReply = true
+        link.failStatusCalls = Set(2...1000)
+        var time = 0.0
+        let remote = RecordingSession(link: link, now: { time }, delay: { time += 0.5 })
+        do { _ = try await remote.stop(); XCTFail("No evidence must not be reported as success") }
+        catch { XCTAssertEqual(error as? SimulatedReplyError, .timeout) }
+        XCTAssertEqual(remote.state, .unknown)
+        XCTAssertEqual(link.calls.filter { $0 == .stop }.count, 1)
+        XCTAssertLessThanOrEqual(time, RecordingSession.recoveryWindow)
+        XCTAssertLessThanOrEqual(link.statusCalls - 1, RecordingSession.recoveryAttempts)
     }
 
     @MainActor func testLostReplyAndDisconnectDoNotReconnectOrReplayCapture() async {
@@ -163,7 +193,10 @@ final class SessionTests: XCTestCase {
         XCTAssertTrue(link.recording)
         XCTAssertEqual(remote.state, .unknown)
         XCTAssertTrue(confirmations.isEmpty)
-        XCTAssertEqual(link.calls, [.status, .stop, .status])
+        // Only read-only checks follow the single STOP, bounded by the attempt cap.
+        XCTAssertEqual(Array(link.calls.prefix(2)), [.status, .stop])
+        XCTAssertEqual(link.calls.dropFirst(2).filter { $0 != .status }, [])
+        XCTAssertEqual(link.calls.count - 2, RecordingSession.recoveryAttempts)
     }
 
     @MainActor func testRefreshKeepsTransportExclusiveWithoutDisablingControls() async throws {

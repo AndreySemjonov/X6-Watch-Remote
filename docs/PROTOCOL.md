@@ -103,8 +103,13 @@ omitted scale is treated as percent. A provided scale must be positive; otherwis
 the reading is unavailable. Proto3 omitted zero level/free space is accepted only
 with supporting explicit scale/capacity, not from an empty nested message.
 
-Battery/storage GET_OPTIONS replies still require live validation, including free
-space units (currently interpreted as bytes) and SD-card location. Missing options
+Live replies from an X6 (fw 1.1.7) confirm battery field 2 as the level (scale
+omitted) and free/total space in bytes. The X6 reports storage locations not in
+the reference enum (0 camera, 1 reader): **2 = internal storage, 3 = SD card**.
+Option **20 follows the storage the camera records to**, and option **176** is a
+repeated StorageState list of all storages (internal and SD). Option 177 holds
+the recording storage's location. The app requests 11, 20 and 176 (request body
+`080b081408b001`) and treats every location except 1 as camera storage. Missing options
 are unavailable, never assumed zero. The existing real battery event is replayed
 in tests; new options-response edge cases use schema-derived synthetic data and
 are not labelled as camera captures. Readout failures do not affect capture state.

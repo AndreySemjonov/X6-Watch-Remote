@@ -21,7 +21,9 @@ public struct CameraMessage: Equatable, Sendable {
 public enum CameraCommand: UInt16, Sendable {
     case start = 4, stop = 5, telemetry = 8, status = 15
     /// GET_OPTIONS: repeated option_types, BATTERY_STATUS=11, STORAGE_STATE=20.
-    var requestBody: [UInt8] { self == .telemetry ? [0x08, 11, 0x08, 20] : [] }
+    /// GET_OPTIONS: BATTERY_STATUS=11, STORAGE_STATE=20 (the storage the camera
+    /// records to) and 176, the X6's list of all storages (internal and SD).
+    var requestBody: [UInt8] { self == .telemetry ? [0x08, 11, 0x08, 20, 0x08, 0xb0, 0x01] : [] }
 }
 
 public enum UCD2 {
