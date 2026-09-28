@@ -1,5 +1,13 @@
 import SwiftUI
 import X6Core
+// Optional personal tools: the public project never includes this package, so
+// this import and the button below compile away and the layout is unchanged.
+#if canImport(ExtraTools)
+import ExtraTools
+private let hasExtraTools = true
+#else
+private let hasExtraTools = false
+#endif
 
 @main struct X6RemoteApp: App {
     @Environment(\.scenePhase) private var scenePhase
@@ -153,6 +161,8 @@ struct RemoteView: View {
     private var diagnostics: some View {
         List {
             Toggle("Detailed logging", isOn: $model.detailedLogging)
+            Button("Send logs to iPhone") { model.sendLogsToPhone() }
+            Text(model.logTransfer.status).font(.caption2)
             NavigationLink("Last command report") {
                 ScrollView { Text(model.commandReport).font(.system(size: 10, design: .monospaced)) }
             }
@@ -303,6 +313,7 @@ private struct RidingScreen<Settings: View>: View {
 
     private func buttons(_ unit: CGFloat) -> some View {
         let height = unit * 22
+        let side = unit * (hasExtraTools ? 15 : 18)
         return HStack(spacing: unit * 2.5) {
             Button {
                 if let action = control.action { onPress(action) }
@@ -330,15 +341,22 @@ private struct RidingScreen<Settings: View>: View {
                 Button(action: onLock) {
                     Image(systemName: locking ? "hourglass" : "drop.fill").font(.system(size: unit * 9))
                         .foregroundStyle(.white)
-                        .frame(width: unit * 18, height: height)
+                        .frame(width: side, height: height)
                         .background(Color.blue.opacity(0.85), in: RoundedRectangle(cornerRadius: unit * 5))
                 }.buttonStyle(.plain).disabled(locking)
                     .accessibilityLabel("Water Lock")
                     .accessibilityHint("Locks the touchscreen. Hold the Digital Crown to unlock.")
             }
+            #if canImport(ExtraTools)
+            NavigationLink { ExtraToolsRoot() } label: {
+                Image(systemName: ExtraToolsRoot.systemImage).font(.system(size: unit * 9))
+                    .frame(width: side, height: height)
+                    .background(Color.gray.opacity(0.25), in: RoundedRectangle(cornerRadius: unit * 5))
+            }.buttonStyle(.plain).disabled(waterLocked).accessibilityLabel(ExtraToolsRoot.title)
+            #endif
             NavigationLink { settings() } label: {
                 Image(systemName: "gearshape.fill").font(.system(size: unit * 9))
-                    .frame(width: unit * 18, height: height)
+                    .frame(width: side, height: height)
                     .background(Color.gray.opacity(0.25), in: RoundedRectangle(cornerRadius: unit * 5))
             }.buttonStyle(.plain).disabled(waterLocked).accessibilityLabel("Settings")
         }

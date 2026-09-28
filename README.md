@@ -86,6 +86,9 @@ to a sports-tracking app.
 - **Last command report** and **Last failed command**: step-by-step record of the
   latest command and the latest failure, kept on the Watch.
 - **Detailed logging** (off by default) for connection troubleshooting.
+- **Send logs to iPhone** (Settings → Diagnostics): one text file with both
+  reports and the detailed log goes to the iPhone app, where you can share it or
+  find it in Files and in PC file sharing.
 - Nothing is sent over the network; there are no analytics.
 
 ## Safety design

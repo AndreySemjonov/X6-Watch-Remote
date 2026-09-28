@@ -9,6 +9,7 @@ import X6Core
     let link = BluetoothCamera()
     let session: RecordingSession
     let riding = RidingSession()
+    let logTransfer = LogTransfer()
     private var ridingPolicy = RidingSessionPolicy()
     @Published var message = "Keep your X6 nearby and switched on"
     // Not @Published: a log line must not redraw the riding screen. Diagnostics
@@ -28,7 +29,7 @@ import X6Core
     private var commandTrace: CommandTrace
     var commandReport: String { commandTrace.report }
     var failureReport: String { commandTrace.lastFailureReport }
-    static let diagnosticRevision = "storage-24"
+    static let diagnosticRevision = "log-transfer-25"
     @Published private(set) var telemetry = CameraTelemetryDisplay()
     @Published private(set) var telemetryMessage = "Camera readings have not arrived yet."
     @Published private(set) var waterLocked = false
@@ -164,6 +165,7 @@ import X6Core
             case .stopQueued: WKInterfaceDevice.current().play(.retry)
             }
         }
+        logTransfer.changed = { [weak self] in self?.objectWillChange.send() }
         riding.log = { [weak self] in self?.log($0) }
         riding.changed = { [weak self] in
             guard let self else { return }
@@ -674,6 +676,41 @@ import X6Core
                 try await CommandDeadline.run(seconds: CommandTimeouts.stopCommand) { try await self.session.connectionReady() }
             } catch { show(error, source: "bluetooth_alert") }
         }
+    }
+
+    /// One text file with a header (build, device, settings, state), both command
+    /// reports and the detailed log files, sent to the iPhone app for sharing.
+    func sendLogsToPhone() {
+        let now = Date()
+        let uptime = ProcessInfo.processInfo.systemUptime
+        let device = WKInterfaceDevice.current()
+        let directory = logURL.deletingLastPathComponent()
+        func file(_ name: String) -> String {
+            (try? String(contentsOf: directory.appendingPathComponent(name), encoding: .utf8)) ?? ""
+        }
+        let header: [(String, String)] = [
+            ("Created", now.formatted(date: .abbreviated, time: .standard)),
+            ("Build", buildLabel),
+            ("Watch", "\(device.model), watchOS \(device.systemVersion)"),
+            ("Connection", "\(link.connection) (ready: \(link.isReady))"),
+            ("Camera state", "\(session.state.rawValue), pending STOP: \(session.pendingStop)"),
+            ("Camera battery", telemetry.batteryText(at: uptime, connected: link.isReady)),
+            ("Storage", ([telemetry.storageText(at: uptime, connected: link.isReady)]
+                         + telemetry.storageLines(at: uptime, connected: link.isReady)).joined(separator: "; ")),
+            ("Watch battery", watchBattery.map { "\($0)%" } ?? "unknown"),
+            ("Riding session", "\(riding.state), start when opened: \(autoRidingSession)"),
+            ("Water Lock", "\(waterLocked)"),
+            ("Settings", "detailed logging \(detailedLogging), double tap \(doubleTapControl), touch feedback \(touchHaptics), notifications \(statusNotifications)"),
+        ]
+        let logNote = detailedLogging ? "" : "Detailed logging is off; turn it on in Diagnostics to record the full log.\n"
+        let text = DiagnosticBundle.make(header: header, sections: [
+            ("Last failed command", commandTrace.lastFailureReport),
+            ("Last command", commandTrace.report),
+            ("Detailed log, older part", logNote + file("x6-diagnostics-previous.txt")),
+            ("Detailed log", logNote + file("x6-diagnostics.txt")),
+        ])
+        log("logs_sent_to_phone bytes=\(text.utf8.count)")
+        logTransfer.send(text, name: DiagnosticBundle.fileName(at: now))
     }
 
     func forgetCamera() {

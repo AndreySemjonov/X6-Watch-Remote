@@ -84,9 +84,9 @@
 			"isa" = "XCBuildConfiguration";
 			"buildSettings" = {
 				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@executable_path/Frameworks");
-				"CURRENT_PROJECT_VERSION" = "24";
+				"CURRENT_PROJECT_VERSION" = "25";
 				"ASSETCATALOG_COMPILER_APPICON_NAME" = "AppIcon";
-				"MARKETING_VERSION" = "0.1.23";
+				"MARKETING_VERSION" = "0.1.24";
 				"INFOPLIST_FILE" = "WatchApp/Info.plist";
 				"SKIP_INSTALL" = "NO";
 				"CODE_SIGN_IDENTITY" = "Apple Development";
@@ -155,9 +155,9 @@
 			"isa" = "XCBuildConfiguration";
 			"buildSettings" = {
 				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@executable_path/Frameworks");
-				"CURRENT_PROJECT_VERSION" = "24";
+				"CURRENT_PROJECT_VERSION" = "25";
 				"ASSETCATALOG_COMPILER_APPICON_NAME" = "AppIcon";
-				"MARKETING_VERSION" = "0.1.23";
+				"MARKETING_VERSION" = "0.1.24";
 				"INFOPLIST_FILE" = "WatchApp/Info.plist";
 				"SKIP_INSTALL" = "NO";
 				"CODE_SIGN_IDENTITY" = "Apple Development";
@@ -183,7 +183,7 @@
 		"4992FCC89C82551B85F2412A" = {
 			"path" = "WatchApp";
 			"isa" = "PBXGroup";
-			"children" = ("B8588EEE1A1D0007EDF53282", "B0EBA3BBB37BCA59608D8DE9", "C7227462A0B52D8F6797B576", "001049624B6AD129ABB317B8", "1F465095A337F88266BBF6BA", "06271BAF49532C879AA3C58B");
+			"children" = ("B8588EEE1A1D0007EDF53282", "B0EBA3BBB37BCA59608D8DE9", "591C35D57B32DEE0571AF62D", "C7227462A0B52D8F6797B576", "001049624B6AD129ABB317B8", "1F465095A337F88266BBF6BA", "06271BAF49532C879AA3C58B");
 			"sourceTree" = "<group>";
 		};
 		"05CC03864C5731B20459F839" = {
@@ -200,12 +200,14 @@
 				"CODE_SIGN_STYLE" = "Automatic";
 				"GENERATE_INFOPLIST_FILE" = "YES";
 				"INFOPLIST_KEY_CFBundleDisplayName" = "X6 Remote";
+				"INFOPLIST_FILE" = "PhoneApp/Info.plist";
+				"INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace" = "YES";
 				"INFOPLIST_KEY_UILaunchScreen_Generation" = "YES";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation" = "YES";
 				"INFOPLIST_KEY_UISupportedInterfaceOrientations" = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				"CURRENT_PROJECT_VERSION" = "24";
+				"CURRENT_PROJECT_VERSION" = "25";
 				"ASSETCATALOG_COMPILER_APPICON_NAME" = "AppIcon";
-				"MARKETING_VERSION" = "0.1.23";
+				"MARKETING_VERSION" = "0.1.24";
 				"SWIFT_EMIT_LOC_STRINGS" = "YES";
 				"SKIP_INSTALL" = "NO";
 				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@executable_path/Frameworks");
@@ -309,7 +311,7 @@
 		"878A52FC5FF6A57D50B7B870" = {
 			"isa" = "PBXSourcesBuildPhase";
 			"buildActionMask" = "2147483647";
-			"files" = ("D56BAB4DB6B54D79F16C1B0C", "C0BEE9F1ECBD6B6BB5032707", "D74B51F7F8517ED33F687390", "EA0EA1500E24F5149460B21A", "0FDABC22E8DA0A3628125F18");
+			"files" = ("D56BAB4DB6B54D79F16C1B0C", "C0BEE9F1ECBD6B6BB5032707", "6BF2AFFF3F4400608756D869", "D74B51F7F8517ED33F687390", "EA0EA1500E24F5149460B21A", "0FDABC22E8DA0A3628125F18");
 			"runOnlyForDeploymentPostprocessing" = "0";
 		};
 		"BC88815622AAF519BDAFC4E8" = {
@@ -333,12 +335,14 @@
 				"CODE_SIGN_STYLE" = "Automatic";
 				"GENERATE_INFOPLIST_FILE" = "YES";
 				"INFOPLIST_KEY_CFBundleDisplayName" = "X6 Remote";
+				"INFOPLIST_FILE" = "PhoneApp/Info.plist";
+				"INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace" = "YES";
 				"INFOPLIST_KEY_UILaunchScreen_Generation" = "YES";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation" = "YES";
 				"INFOPLIST_KEY_UISupportedInterfaceOrientations" = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				"CURRENT_PROJECT_VERSION" = "24";
+				"CURRENT_PROJECT_VERSION" = "25";
 				"ASSETCATALOG_COMPILER_APPICON_NAME" = "AppIcon";
-				"MARKETING_VERSION" = "0.1.23";
+				"MARKETING_VERSION" = "0.1.24";
 				"SWIFT_EMIT_LOC_STRINGS" = "YES";
 				"SKIP_INSTALL" = "NO";
 				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@executable_path/Frameworks");
@@ -446,6 +450,16 @@
 		"C0BEE9F1ECBD6B6BB5032707" = {
 			"isa" = "PBXBuildFile";
 			"fileRef" = "B0EBA3BBB37BCA59608D8DE9";
+		};
+		"591C35D57B32DEE0571AF62D" = {
+			"path" = "LogTransfer.swift";
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"sourceTree" = "<group>";
+		};
+		"6BF2AFFF3F4400608756D869" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = "591C35D57B32DEE0571AF62D";
 		};
 		"B8588EEE1A1D0007EDF53282" = {
 			"path" = "BluetoothCamera.swift";
