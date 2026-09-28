@@ -239,6 +239,12 @@ private struct RidingScreen<Settings: View>: View {
             .frame(width: geometry.size.width, height: geometry.size.height)
         }
         .background(tint.ignoresSafeArea())
+        #if canImport(ExtraTools)
+        // Personal builds only: under Water Lock a firm Crown turn shows the extra
+        // tools page for 10 seconds, with this state line on top.
+        .modifier(ExtraToolsCrownSwitch(enabled: waterLocked, status: "\(face.headline) \(shownDuration)",
+                                        statusColor: headlineColor))
+        #endif
     }
 
     private var tint: Color {
@@ -264,6 +270,9 @@ private struct RidingScreen<Settings: View>: View {
         case .stopQueued, .working: return "hourglass"
         }
     }
+    private var headlineColor: Color {
+        face.tone == .recording ? Color.red : (face.tone == .attention ? Color.orange : Color.white)
+    }
     private var shownDuration: String {
         control == .working || control == .stopQueued || !connected ? "--:--" : duration
     }
@@ -272,7 +281,7 @@ private struct RidingScreen<Settings: View>: View {
         HStack(spacing: unit * 2) {
             Text(face.headline)
                 .font(.system(size: unit * 10, weight: .heavy))
-                .foregroundStyle(face.tone == .recording ? Color.red : (face.tone == .attention ? Color.orange : Color.white))
+                .foregroundStyle(headlineColor)
                 .lineLimit(1).minimumScaleFactor(0.6)
             if riding {
                 Image(systemName: "location.fill").font(.system(size: unit * 6))
@@ -295,6 +304,9 @@ private struct RidingScreen<Settings: View>: View {
             value("WATCH", watchBattery.map { "\($0)%" } ?? "—",
                   low: watchBattery.map { $0 <= WatchBattery.lowPercent } ?? false, unit)
                 .accessibilityLabel("Watch battery \(watchBattery.map { "\($0) percent" } ?? "unknown")")
+            #if canImport(ExtraTools)
+            ExtraToolsStripItem(labelSize: max(11, unit * 5), valueSize: unit * 10)
+            #endif
         }
         .opacity(dimmed ? 0.6 : 1)
     }
