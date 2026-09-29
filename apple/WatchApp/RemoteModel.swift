@@ -113,7 +113,10 @@ import X6Core
         }
         UNUserNotificationCenter.current().delegate = quietForegroundNotifications
         link.log = { [weak self] in self?.log($0) }
-        link.changed = { [weak self] in self?.objectWillChange.send() }
+        link.changed = { [weak self] in
+            self?.objectWillChange.send()
+            self?.startRidingIfCameraConnected()
+        }
         link.lost = { [weak self] in
             guard let self else { return }
             self.session.connectionLost()
@@ -296,7 +299,8 @@ import X6Core
         // Cold launch or return from background; a wrist raise is not an open.
         // Location sessions may only start while active, which this is.
         if !wasVisible && notificationPolicy.visible {
-            let decision = ridingPolicy.opened(enabled: autoRidingSession, at: Date().timeIntervalSinceReferenceDate)
+            let decision = ridingPolicy.opened(enabled: autoRidingSession, cameraConnected: link.isReady,
+                                               at: Date().timeIntervalSinceReferenceDate)
             // Also retry a wanted session that permission or the OS stopped.
             if decision == .start || (ridingPolicy.wanted && !riding.isRunning) { riding.start() }
         }
@@ -313,11 +317,26 @@ import X6Core
     func endRidingSession() {
         _ = ridingPolicy.userEnded()
         riding.stop()
+        log("riding_session_ended_by_user")
+        WKInterfaceDevice.current().play(.stop)
+    }
+
+    /// Since 0.1.25 the riding session starts when the camera connects while the
+    /// app is active, not on every open: opening X6 Remote only to look at the time
+    /// or the wind leaves no background location running.
+    private func startRidingIfCameraConnected() {
+        guard link.isReady else { return }
+        let decision = ridingPolicy.cameraConnected(enabled: autoRidingSession, active: foreground,
+                                                    at: Date().timeIntervalSinceReferenceDate)
+        if decision == .start {
+            log("riding_session_start reason=camera_connected")
+            riding.start()
+        }
     }
 
     var ridingStatus: String {
         switch riding.state {
-        case .off: return "Off. Opening X6 Remote starts it when automatic start is on."
+        case .off: return "Off. Starts when the camera connects while X6 Remote is open (automatic start on)."
         case .waitingForPermission: return "Waiting for location permission."
         case .denied: return "Location is not allowed. Enable X6 Remote in Watch Settings → Privacy & Security → Location Services."
         case .running:
@@ -342,6 +361,7 @@ import X6Core
     private func setForeground(_ value: Bool) {
         openOrToggleGate.sceneChanged(active: value, connection: link.connectionID)
         foreground = value; log("foreground=\(value)")
+        if value { startRidingIfCameraConnected() }
         if value { budgetExhausted = false; budgetMessage = nil }
         updatePolicy()
         if !value { telemetryTask?.cancel() }

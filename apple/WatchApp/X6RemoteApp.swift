@@ -59,7 +59,8 @@ struct RemoteView: View {
                              },
                              canLock: model.canEnableWaterLock, locking: model.waterLockChecking,
                              onLock: { model.enableWaterLock() },
-                             doubleTap: model.doubleTapControl) { settings }
+                             doubleTap: model.doubleTapControl,
+                             onEndRide: { model.endRidingSession() }) { settings }
                     .onChange(of: context.date) { _, _ in model.refreshWaterLockState() }
             }
             .navigationTitle("X6")
@@ -138,8 +139,8 @@ struct RemoteView: View {
             } else {
                 Button("Start riding session") { model.startRidingSession() }
             }
-            Toggle("Start when X6 opens", isOn: $model.autoRidingSession)
-            Text("Keeps X6 Remote running and connected while SURFR is on screen. Uses location; nothing is stored. Ends after 4 hours without opening X6.")
+            Toggle("Start when the camera connects", isOn: $model.autoRidingSession)
+            Text("Keeps X6 Remote running and connected while SURFR is on screen. Starts when the camera connects while X6 Remote is open. Uses location; nothing is stored. Ends after 4 hours without opening X6, or with a long press on the green location icon.")
                 .font(.caption2).foregroundStyle(.secondary)
         }.navigationTitle("Riding")
     }
@@ -208,17 +209,21 @@ private struct RidingScreen<Settings: View>: View {
     var locking = false
     var onLock: () -> Void = {}
     var doubleTap = true
+    /// Long press on the riding-session icon ends the ride.
+    var onEndRide: () -> Void = {}
     @ViewBuilder let settings: () -> Settings
 
     var body: some View {
         GeometryReader { geometry in
             // One unit is 1% of the screen height, top edge included: since 0.1.25
             // the state line shares the top row with the system clock, which frees
-            // room for two rows of wide buttons. No scrolling: the Crown must never
-            // move recording information off screen during a ride.
+            // room for two rows of buttons. No scrolling: the Crown must never move
+            // recording information off screen during a ride.
             let unit = geometry.size.height / 100
-            // Height budget in units: top 4, state 8, time 22, strip 15, hint 6,
-            // buttons 20 + 2 + 17, bottom 2, spacing 5 = 101 with a hint, 95 without.
+            // Everything below the clock row keeps 7% of the width free on both sides.
+            let side = geometry.size.width * 0.07
+            // Height budget in units: top 4, state 8, time 25, strip 15, hint 6,
+            // buttons 16 + 2.5 + 13, bottom 6, spacing 5 = 100.5 with a hint, 94.5 without.
             VStack(spacing: unit * 1) {
                 headline(unit)
                     .frame(maxWidth: .infinity, minHeight: unit * 8, alignment: .leading)
@@ -226,25 +231,27 @@ private struct RidingScreen<Settings: View>: View {
                     .padding(.leading, unit * 6)
                     .padding(.trailing, geometry.size.width * 0.31)
                 Text(shownDuration)
-                    .font(.system(size: unit * 22, weight: .bold, design: .rounded))
+                    .font(.system(size: unit * 25, weight: .bold, design: .rounded))
                     .monospacedDigit().lineLimit(1).minimumScaleFactor(0.5)
                     .foregroundStyle(.white)
-                    .frame(height: unit * 22)
+                    .frame(height: unit * 25)
                     .accessibilityLabel("Recording duration \(shownDuration)")
                 strip(unit)
+                    .padding(.horizontal, side)
                 if let hint = face.hint {
                     Text(hint)
                         .font(.system(size: max(12, unit * 5.5), weight: .medium))
                         .foregroundStyle(.orange)
                         .multilineTextAlignment(.center).lineLimit(1).minimumScaleFactor(0.6)
+                        .padding(.horizontal, side)
                 }
                 Spacer(minLength: 0)
-                buttons(unit).opacity(dimmed ? 0.35 : 1)
+                buttons(unit, side: side, width: geometry.size.width).opacity(dimmed ? 0.35 : 1)
             }
-            // Top: level with the clock. Bottom: the screen's reserved bottom margin is
-            // used too, just clear of the rounded corners.
+            // Top: level with the clock. Bottom: the second row sits above the
+            // rounded bottom corners.
             .padding(.top, unit * 4)
-            .padding(.bottom, unit * 2)
+            .padding(.bottom, unit * 6)
             .frame(width: geometry.size.width, height: geometry.size.height)
         }
         .ignoresSafeArea(edges: [.top, .bottom])
@@ -296,7 +303,12 @@ private struct RidingScreen<Settings: View>: View {
                 .lineLimit(1).minimumScaleFactor(0.5)
             if riding {
                 Image(systemName: "location.fill").font(.system(size: unit * 6))
-                    .foregroundStyle(.green).accessibilityLabel("Riding session active")
+                    .foregroundStyle(.green)
+                    // A long press ends the ride (also in Settings > Riding session).
+                    .padding(unit * 2).contentShape(Rectangle())
+                    .onLongPressGesture(minimumDuration: 0.8) { onEndRide() }
+                    .accessibilityLabel("Riding session active")
+                    .accessibilityAction(named: "End ride") { onEndRide() }
             }
             if waterLocked {
                 Image(systemName: "drop.fill").font(.system(size: unit * 7))
@@ -334,12 +346,13 @@ private struct RidingScreen<Settings: View>: View {
         .accessibilityElement(children: .ignore)
     }
 
-    /// Row 1: the recording button across the full width. Row 2: Water Lock, extra
-    /// tools (personal builds) and Settings, sharing the width equally.
-    private func buttons(_ unit: CGFloat) -> some View {
-        let height = unit * 20
-        let small = unit * 17
-        return VStack(spacing: unit * 2) {
+    /// Row 1: the recording button inside the side margins. Row 2: Water Lock, extra
+    /// tools (personal builds) and Settings, sharing the width equally, drawn in
+    /// further so its outer corners clear the screen's rounded corners.
+    private func buttons(_ unit: CGFloat, side: CGFloat, width: CGFloat) -> some View {
+        let height = unit * 16
+        let small = unit * 13
+        return VStack(spacing: unit * 2.5) {
             Button {
                 if let action = control.action { onPress(action) }
             } label: {
@@ -351,6 +364,7 @@ private struct RidingScreen<Settings: View>: View {
                 }
                 .padding(.horizontal, unit * 3)
                 .frame(maxWidth: .infinity, minHeight: height, maxHeight: height)
+                .padding(.horizontal, side)
                 .background(control == .recording ? accent : accent.opacity(0.23),
                             in: RoundedRectangle(cornerRadius: unit * 7))
                 .contentShape(RoundedRectangle(cornerRadius: unit * 7))
@@ -390,6 +404,7 @@ private struct RidingScreen<Settings: View>: View {
                 }.buttonStyle(.plain).disabled(waterLocked).accessibilityLabel("Settings")
             }
             .frame(height: small)
+            .padding(.horizontal, side + width * 0.05)
         }
     }
 }

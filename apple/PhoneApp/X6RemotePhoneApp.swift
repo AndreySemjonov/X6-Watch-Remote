@@ -17,7 +17,7 @@ import WatchConnectivity
                     Section("Camera control runs on your Watch") {
                         Text("This iPhone app makes the actions available in Shortcuts. Run them from your Watch; the phone does not connect to the camera.")
                         Text("Start explicitly starts recording. Toggle switches between START and STOP when connected. When disconnected, Toggle queues STOP only.")
-                        Text("With SURFR, open X6 Remote on the Watch first: its riding session keeps it running and connected. Allow location when asked; nothing is stored.")
+                        Text("With SURFR, open X6 Remote on the Watch first and let the camera connect: its riding session then keeps it running and connected. Allow location when asked; nothing is stored.")
                     }
                     Section {
                         if inbox.files.isEmpty {

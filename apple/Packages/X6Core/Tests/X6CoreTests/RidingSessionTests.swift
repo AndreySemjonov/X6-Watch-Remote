@@ -4,36 +4,36 @@ import XCTest
 final class RidingSessionTests: XCTestCase {
     func testOpeningStartsOnceAndReopeningExtendsDeadline() {
         var policy = RidingSessionPolicy()
-        XCTAssertEqual(policy.opened(enabled: true, at: 0), .start)
+        XCTAssertEqual(policy.opened(enabled: true, cameraConnected: true, at: 0), .start)
         XCTAssertEqual(policy.remaining(at: 0), RidingSessionPolicy.maximumDuration)
-        XCTAssertEqual(policy.opened(enabled: true, at: 3_600), .none)
+        XCTAssertEqual(policy.opened(enabled: true, cameraConnected: true, at: 3_600), .none)
         XCTAssertEqual(policy.remaining(at: 3_600), RidingSessionPolicy.maximumDuration)
         XCTAssertEqual(policy.check(at: RidingSessionPolicy.maximumDuration + 1), .none)
     }
 
     func testFourHourCapEndsSessionUntilNextOpen() {
         var policy = RidingSessionPolicy()
-        _ = policy.opened(enabled: true, at: 100)
+        _ = policy.opened(enabled: true, cameraConnected: true, at: 100)
         XCTAssertEqual(policy.check(at: 100 + RidingSessionPolicy.maximumDuration - 1), .none)
         XCTAssertEqual(policy.check(at: 100 + RidingSessionPolicy.maximumDuration), .stop)
         XCTAssertFalse(policy.wanted)
         XCTAssertNil(policy.remaining(at: 100 + RidingSessionPolicy.maximumDuration))
         XCTAssertEqual(policy.check(at: 100 + RidingSessionPolicy.maximumDuration + 10), .none)
-        XCTAssertEqual(policy.opened(enabled: true, at: 20_000), .start)
+        XCTAssertEqual(policy.opened(enabled: true, cameraConnected: true, at: 20_000), .start)
     }
 
     func testManualEndStaysEndedWhileFrontmostAndRestartsOnNextOpen() {
         var policy = RidingSessionPolicy()
-        _ = policy.opened(enabled: true, at: 0)
+        _ = policy.opened(enabled: true, cameraConnected: true, at: 0)
         XCTAssertEqual(policy.userEnded(), .stop)
         XCTAssertEqual(policy.userEnded(), .none)
         XCTAssertEqual(policy.check(at: 99_999), .none)
-        XCTAssertEqual(policy.opened(enabled: true, at: 50), .start)
+        XCTAssertEqual(policy.opened(enabled: true, cameraConnected: true, at: 50), .start)
     }
 
     func testManualStartWorksWithAutomaticSettingOff() {
         var policy = RidingSessionPolicy()
-        XCTAssertEqual(policy.opened(enabled: false, at: 0), .none)
+        XCTAssertEqual(policy.opened(enabled: false, cameraConnected: true, at: 0), .none)
         XCTAssertEqual(policy.userStarted(at: 10), .start)
         XCTAssertEqual(policy.userStarted(at: 20), .none)
         XCTAssertEqual(policy.remaining(at: 20), RidingSessionPolicy.maximumDuration)
@@ -42,9 +42,40 @@ final class RidingSessionTests: XCTestCase {
     func testManualSessionSurvivesReopenWithAutomaticStartOff() {
         var policy = RidingSessionPolicy()
         _ = policy.userStarted(at: 1)
-        XCTAssertEqual(policy.opened(enabled: false, at: 2), .none)
+        XCTAssertEqual(policy.opened(enabled: false, cameraConnected: true, at: 2), .none)
         XCTAssertTrue(policy.wanted)
         XCTAssertEqual(policy.remaining(at: 2), RidingSessionPolicy.maximumDuration)
+    }
+
+    func testOpeningWithoutCameraStartsNothing() {
+        var policy = RidingSessionPolicy()
+        XCTAssertEqual(policy.opened(enabled: true, cameraConnected: false, at: 0), .none)
+        XCTAssertFalse(policy.wanted)
+    }
+
+    func testCameraConnectingWhileActiveStartsOnce() {
+        var policy = RidingSessionPolicy()
+        _ = policy.opened(enabled: true, cameraConnected: false, at: 0)
+        XCTAssertEqual(policy.cameraConnected(enabled: true, active: false, at: 5), .none)  // watchOS: only while active
+        XCTAssertEqual(policy.cameraConnected(enabled: true, active: true, at: 10), .start)
+        XCTAssertEqual(policy.cameraConnected(enabled: true, active: true, at: 20), .none)
+        XCTAssertEqual(policy.remaining(at: 10), RidingSessionPolicy.maximumDuration)
+        XCTAssertEqual(policy.cameraConnected(enabled: false, active: true, at: 30), .none)
+    }
+
+    func testEndRideIsNotUndoneByReconnectingUntilNextOpen() {
+        var policy = RidingSessionPolicy()
+        _ = policy.opened(enabled: true, cameraConnected: true, at: 0)
+        XCTAssertEqual(policy.userEnded(), .stop)
+        XCTAssertEqual(policy.cameraConnected(enabled: true, active: true, at: 60), .none)
+        XCTAssertEqual(policy.opened(enabled: true, cameraConnected: false, at: 120), .none)
+        XCTAssertEqual(policy.cameraConnected(enabled: true, active: true, at: 130), .start)
+    }
+
+    func testAutomaticStartOffNeverStartsOnConnect() {
+        var policy = RidingSessionPolicy()
+        XCTAssertEqual(policy.opened(enabled: false, cameraConnected: true, at: 0), .none)
+        XCTAssertEqual(policy.cameraConnected(enabled: false, active: true, at: 1), .none)
     }
 
     func testPollingCadence() {
