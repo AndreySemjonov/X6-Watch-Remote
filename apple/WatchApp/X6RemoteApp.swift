@@ -217,32 +217,37 @@ private struct RidingScreen<Settings: View>: View {
             // room for two rows of wide buttons. No scrolling: the Crown must never
             // move recording information off screen during a ride.
             let unit = geometry.size.height / 100
-            VStack(spacing: unit * 1.2) {
+            // Height budget in units: top 4, state 8, time 22, strip 15, hint 6,
+            // buttons 20 + 2 + 17, bottom 2, spacing 5 = 101 with a hint, 95 without.
+            VStack(spacing: unit * 1) {
                 headline(unit)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(maxWidth: .infinity, minHeight: unit * 8, alignment: .leading)
                     // Clear the rounded corner on the left; the clock owns the top right.
-                    .padding(.leading, unit * 7)
-                    .padding(.trailing, geometry.size.width * 0.34)
+                    .padding(.leading, unit * 6)
+                    .padding(.trailing, geometry.size.width * 0.31)
                 Text(shownDuration)
-                    .font(.system(size: unit * 25, weight: .bold, design: .rounded))
+                    .font(.system(size: unit * 22, weight: .bold, design: .rounded))
                     .monospacedDigit().lineLimit(1).minimumScaleFactor(0.5)
                     .foregroundStyle(.white)
-                    .frame(height: unit * 25)
+                    .frame(height: unit * 22)
                     .accessibilityLabel("Recording duration \(shownDuration)")
                 strip(unit)
                 if let hint = face.hint {
                     Text(hint)
                         .font(.system(size: max(12, unit * 5.5), weight: .medium))
                         .foregroundStyle(.orange)
-                        .multilineTextAlignment(.center).lineLimit(2).minimumScaleFactor(0.7)
+                        .multilineTextAlignment(.center).lineLimit(1).minimumScaleFactor(0.6)
                 }
                 Spacer(minLength: 0)
                 buttons(unit).opacity(dimmed ? 0.35 : 1)
             }
-            .padding(.top, unit * 2)
+            // Top: level with the clock. Bottom: the screen's reserved bottom margin is
+            // used too, just clear of the rounded corners.
+            .padding(.top, unit * 4)
+            .padding(.bottom, unit * 2)
             .frame(width: geometry.size.width, height: geometry.size.height)
         }
-        .ignoresSafeArea(edges: .top)
+        .ignoresSafeArea(edges: [.top, .bottom])
         .background(tint.ignoresSafeArea())
         #if canImport(ExtraTools)
         // Personal builds only: under Water Lock a firm Crown turn shows the extra
@@ -284,10 +289,11 @@ private struct RidingScreen<Settings: View>: View {
 
     private func headline(_ unit: CGFloat) -> some View {
         HStack(spacing: unit * 2) {
+            // Shares the top row with the clock: sized to fit "RECONNECTING…" there.
             Text(face.headline)
-                .font(.system(size: unit * 10, weight: .heavy))
+                .font(.system(size: unit * 7.5, weight: .heavy))
                 .foregroundStyle(headlineColor)
-                .lineLimit(1).minimumScaleFactor(0.6)
+                .lineLimit(1).minimumScaleFactor(0.5)
             if riding {
                 Image(systemName: "location.fill").font(.system(size: unit * 6))
                     .foregroundStyle(.green).accessibilityLabel("Riding session active")
@@ -331,8 +337,8 @@ private struct RidingScreen<Settings: View>: View {
     /// Row 1: the recording button across the full width. Row 2: Water Lock, extra
     /// tools (personal builds) and Settings, sharing the width equally.
     private func buttons(_ unit: CGFloat) -> some View {
-        let height = unit * 19
-        let small = unit * 15
+        let height = unit * 20
+        let small = unit * 17
         return VStack(spacing: unit * 2) {
             Button {
                 if let action = control.action { onPress(action) }
