@@ -43,9 +43,12 @@ to a sports-tracking app.
 - **Riding screen made for a glance:** the background turns red while recording
   and orange when something needs attention, with one large state line and the
   camera's recording time as the biggest number.
-- **Camera battery, free space and Watch battery** in large type below. Free space
-  is for the storage the camera records to, labelled **SD** or **INT** (internal),
-  and any value turns orange when low. Settings → Camera lists every storage.
+- **Camera battery, free space and Watch battery** in large type below, marked
+  with a camera, SD card and watch icon. Free space is for the storage the camera
+  records to (an SD card or an internal-storage icon), and any value turns orange
+  when low. Settings → Camera lists every storage.
+- **Two rows of buttons:** START/STOP on its own row; Water Lock and Settings
+  below it. The state line shares the top row with the clock.
 
 ![The four main screen states: ready, recording, disconnected while reconnecting, and recording under Water Lock](docs/images/x6-watch-screens.jpg)
 
