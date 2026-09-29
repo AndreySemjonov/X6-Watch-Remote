@@ -236,8 +236,9 @@ private struct RidingScreen<Settings: View>: View {
                     .foregroundStyle(.white)
                     .frame(height: unit * 25)
                     .accessibilityLabel("Recording duration \(shownDuration)")
-                strip(unit)
-                    .padding(.horizontal, side)
+                // Mid-screen the display is full width: the strip needs no side margins.
+                strip(unit, width: geometry.size.width - unit * 4)
+                    .padding(.horizontal, unit * 2)
                 if let hint = face.hint {
                     Text(hint)
                         .font(.system(size: max(12, unit * 5.5), weight: .medium))
@@ -318,26 +319,39 @@ private struct RidingScreen<Settings: View>: View {
         .frame(height: unit * 12)
     }
 
-    private func strip(_ unit: CGFloat) -> some View {
-        HStack(spacing: unit * 2) {
-            value("CAM", cameraBattery, low: cameraBatteryLow, unit)
+    /// Icons instead of words (0.1.25): camera, SD card or internal storage, watch.
+    /// Personal builds add a wind column 1.6x as wide, so "3.6/4.5" fits.
+    private func strip(_ unit: CGFloat, width: CGFloat) -> some View {
+        #if canImport(ExtraTools)
+        let shares: CGFloat = 4.6
+        #else
+        let shares: CGFloat = 3
+        #endif
+        let column = width / shares
+        return HStack(spacing: 0) {
+            value("camera.fill", cameraBattery, low: cameraBatteryLow, unit)
+                .frame(width: column)
                 .accessibilityLabel("Camera battery \(cameraBattery)")
-            value(storageLabel, storage, low: storageLow, unit)
+            value(storageLabel == "INT" ? "internaldrive.fill" : "sdcard.fill", storage, low: storageLow, unit)
+                .frame(width: column)
                 .accessibilityLabel("\(storageLabel == "INT" ? "Internal storage" : "SD card") free space \(storage)")
-            value("WATCH", watchBattery.map { "\($0)%" } ?? "—",
+            value("applewatch", watchBattery.map { "\($0)%" } ?? "—",
                   low: watchBattery.map { $0 <= WatchBattery.lowPercent } ?? false, unit)
+                .frame(width: column)
                 .accessibilityLabel("Watch battery \(watchBattery.map { "\($0) percent" } ?? "unknown")")
             #if canImport(ExtraTools)
             ExtraToolsStripItem(labelSize: max(11, unit * 5), valueSize: unit * 10)
+                .frame(width: column * 1.6)
             #endif
         }
         .opacity(dimmed ? 0.6 : 1)
     }
 
-    private func value(_ label: String, _ text: String, low: Bool, _ unit: CGFloat) -> some View {
+    private func value(_ icon: String, _ text: String, low: Bool, _ unit: CGFloat) -> some View {
         VStack(spacing: 0) {
-            Text(label).font(.system(size: max(11, unit * 5), weight: .semibold))
+            Image(systemName: icon).font(.system(size: max(11, unit * 5), weight: .semibold))
                 .foregroundStyle(.white.opacity(0.7))
+                .frame(height: max(13, unit * 6))
             Text(text).font(.system(size: unit * 10, weight: .bold)).monospacedDigit()
                 .foregroundStyle(low ? Color.orange : Color.white)
                 .lineLimit(1).minimumScaleFactor(0.55)
