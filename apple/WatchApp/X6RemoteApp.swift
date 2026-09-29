@@ -140,7 +140,7 @@ struct RemoteView: View {
                 Button("Start riding session") { model.startRidingSession() }
             }
             Toggle("Start when the camera connects", isOn: $model.autoRidingSession)
-            Text("Keeps X6 Remote running and connected while SURFR is on screen. Starts when the camera connects while X6 Remote is open. Uses location; nothing is stored. Ends after 4 hours without opening X6, or with a long press on the green location icon.")
+            Text("Keeps X6 Remote running and connected while SURFR is on screen. Starts when the camera connects while X6 Remote is open. Uses location; nothing is stored. Ends after 4 hours without opening X6, or with a long press on the recording time.")
                 .font(.caption2).foregroundStyle(.secondary)
         }.navigationTitle("Riding")
     }
@@ -235,6 +235,12 @@ private struct RidingScreen<Settings: View>: View {
                     .monospacedDigit().lineLimit(1).minimumScaleFactor(0.5)
                     .foregroundStyle(.white)
                     .frame(height: unit * 25)
+                    .frame(maxWidth: .infinity)
+                    // A long press on the time ends the ride (also Settings > Riding
+                    // session). Not on the location icon: at the top edge watchOS
+                    // opens the notification list instead.
+                    .contentShape(Rectangle())
+                    .onLongPressGesture(minimumDuration: 0.8) { if riding { onEndRide() } }
                     .accessibilityLabel("Recording duration \(shownDuration)")
                 // Mid-screen the display is full width: the strip needs no side margins.
                 strip(unit, width: geometry.size.width - unit * 4)
@@ -305,9 +311,6 @@ private struct RidingScreen<Settings: View>: View {
             if riding {
                 Image(systemName: "location.fill").font(.system(size: unit * 6))
                     .foregroundStyle(.green)
-                    // A long press ends the ride (also in Settings > Riding session).
-                    .padding(unit * 2).contentShape(Rectangle())
-                    .onLongPressGesture(minimumDuration: 0.8) { onEndRide() }
                     .accessibilityLabel("Riding session active")
                     .accessibilityAction(named: "End ride") { onEndRide() }
             }
@@ -340,7 +343,7 @@ private struct RidingScreen<Settings: View>: View {
                 .frame(width: column)
                 .accessibilityLabel("Watch battery \(watchBattery.map { "\($0) percent" } ?? "unknown")")
             #if canImport(ExtraTools)
-            ExtraToolsStripItem(labelSize: max(11, unit * 5), valueSize: unit * 10)
+            ExtraToolsStripItem(labelSize: max(11, unit * 5), valueSize: unit * 8)
                 .frame(width: column * 1.6)
             #endif
         }
@@ -352,10 +355,11 @@ private struct RidingScreen<Settings: View>: View {
             Image(systemName: icon).font(.system(size: max(11, unit * 5), weight: .semibold))
                 .foregroundStyle(.white.opacity(0.7))
                 .frame(height: max(13, unit * 6))
-            Text(text).font(.system(size: unit * 10, weight: .bold)).monospacedDigit()
+            Text(text).font(.system(size: unit * 8, weight: .bold)).monospacedDigit()
                 .foregroundStyle(low ? Color.orange : Color.white)
                 .lineLimit(1).minimumScaleFactor(0.55)
         }
+        .padding(.horizontal, unit * 1.2)
         .frame(maxWidth: .infinity)
         .accessibilityElement(children: .ignore)
     }

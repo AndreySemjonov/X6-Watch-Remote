@@ -80,8 +80,8 @@ to a sports-tracking app.
   another app, such as a workout tracker, is also running, and lets the Watch
   return to X6 Remote. It does not end the other app's workout. Opening X6 Remote
   with the camera off starts nothing, so it doesn't run in the background for
-  hours. The session ends with a long press on the green location icon, **End
-  riding session** in Settings, or 4 hours after you last opened the app. Location
+  hours. The session ends with a long press on the recording time, **End riding
+  session** in Settings, or 4 hours after you last opened the app. Location
   is only used to keep the app running; it is never stored or sent anywhere.
 - **Water Lock button** on the main screen while the riding session runs. Hold
   the Digital Crown to unlock, as usual.
