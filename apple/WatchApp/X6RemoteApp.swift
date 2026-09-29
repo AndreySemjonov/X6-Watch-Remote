@@ -1,12 +1,9 @@
 import SwiftUI
 import X6Core
 // Optional personal tools: the public project never includes this package, so
-// this import and the button below compile away and the layout is unchanged.
+// this import, the extra button and strip value compile away.
 #if canImport(ExtraTools)
 import ExtraTools
-private let hasExtraTools = true
-#else
-private let hasExtraTools = false
 #endif
 
 @main struct X6RemoteApp: App {
@@ -215,33 +212,41 @@ private struct RidingScreen<Settings: View>: View {
 
     var body: some View {
         GeometryReader { geometry in
-            // One unit is 1% of the usable height. No scrolling: the Crown must
-            // never move recording information off screen during a ride.
+            // One unit is 1% of the screen height, top edge included: since 0.1.25
+            // the state line shares the top row with the system clock, which frees
+            // room for two rows of wide buttons. No scrolling: the Crown must never
+            // move recording information off screen during a ride.
             let unit = geometry.size.height / 100
-            VStack(spacing: unit * 1.5) {
+            VStack(spacing: unit * 1.2) {
                 headline(unit)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    // Clear the rounded corner on the left; the clock owns the top right.
+                    .padding(.leading, unit * 7)
+                    .padding(.trailing, geometry.size.width * 0.34)
                 Text(shownDuration)
-                    .font(.system(size: unit * 27, weight: .bold, design: .rounded))
+                    .font(.system(size: unit * 25, weight: .bold, design: .rounded))
                     .monospacedDigit().lineLimit(1).minimumScaleFactor(0.5)
                     .foregroundStyle(.white)
-                    .frame(height: unit * 28)
+                    .frame(height: unit * 25)
                     .accessibilityLabel("Recording duration \(shownDuration)")
                 strip(unit)
                 if let hint = face.hint {
                     Text(hint)
-                        .font(.system(size: max(13, unit * 6), weight: .medium))
+                        .font(.system(size: max(12, unit * 5.5), weight: .medium))
                         .foregroundStyle(.orange)
                         .multilineTextAlignment(.center).lineLimit(2).minimumScaleFactor(0.7)
                 }
                 Spacer(minLength: 0)
                 buttons(unit).opacity(dimmed ? 0.35 : 1)
             }
+            .padding(.top, unit * 2)
             .frame(width: geometry.size.width, height: geometry.size.height)
         }
+        .ignoresSafeArea(edges: .top)
         .background(tint.ignoresSafeArea())
         #if canImport(ExtraTools)
         // Personal builds only: under Water Lock a firm Crown turn shows the extra
-        // tools page for 10 seconds, with this state line on top.
+        // tools page over this screen.
         .modifier(ExtraToolsCrownSwitch(enabled: waterLocked, status: "\(face.headline) \(shownDuration)",
                                         statusColor: headlineColor))
         #endif
@@ -323,10 +328,12 @@ private struct RidingScreen<Settings: View>: View {
         .accessibilityElement(children: .ignore)
     }
 
+    /// Row 1: the recording button across the full width. Row 2: Water Lock, extra
+    /// tools (personal builds) and Settings, sharing the width equally.
     private func buttons(_ unit: CGFloat) -> some View {
-        let height = unit * 22
-        let side = unit * (hasExtraTools ? 15 : 18)
-        return HStack(spacing: unit * 2.5) {
+        let height = unit * 19
+        let small = unit * 15
+        return VStack(spacing: unit * 2) {
             Button {
                 if let action = control.action { onPress(action) }
             } label: {
@@ -349,30 +356,35 @@ private struct RidingScreen<Settings: View>: View {
             .disabled(control.action == nil || waterLocked)
             .accessibilityLabel(control.buttonTitle)
             .accessibilityHint(waterLocked ? "Use the Action button while Water Lock is on." : control.hint)
-            if canLock {
-                Button(action: onLock) {
-                    Image(systemName: locking ? "hourglass" : "drop.fill").font(.system(size: unit * 9))
-                        .foregroundStyle(.white)
-                        .frame(width: side, height: height)
-                        .background(Color.blue.opacity(0.85), in: RoundedRectangle(cornerRadius: unit * 5))
-                }.buttonStyle(.plain).disabled(locking)
-                    .accessibilityLabel("Water Lock")
-                    .accessibilityHint("Locks the touchscreen. Hold the Digital Crown to unlock.")
+            HStack(spacing: unit * 2.5) {
+                if canLock {
+                    Button(action: onLock) {
+                        Image(systemName: locking ? "hourglass" : "drop.fill").font(.system(size: unit * 8))
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: .infinity, minHeight: small, maxHeight: small)
+                            .background(Color.blue.opacity(0.85), in: RoundedRectangle(cornerRadius: unit * 5))
+                            .contentShape(RoundedRectangle(cornerRadius: unit * 5))
+                    }.buttonStyle(.plain).disabled(locking)
+                        .accessibilityLabel("Water Lock")
+                        .accessibilityHint("Locks the touchscreen. Hold the Digital Crown to unlock.")
+                }
+                #if canImport(ExtraTools)
+                NavigationLink { ExtraToolsRoot() } label: {
+                    Image(systemName: ExtraToolsRoot.systemImage).font(.system(size: unit * 8))
+                        .frame(maxWidth: .infinity, minHeight: small, maxHeight: small)
+                        .background(Color.gray.opacity(0.25), in: RoundedRectangle(cornerRadius: unit * 5))
+                        .contentShape(RoundedRectangle(cornerRadius: unit * 5))
+                }.buttonStyle(.plain).disabled(waterLocked).accessibilityLabel(ExtraToolsRoot.title)
+                #endif
+                NavigationLink { settings() } label: {
+                    Image(systemName: "gearshape.fill").font(.system(size: unit * 8))
+                        .frame(maxWidth: .infinity, minHeight: small, maxHeight: small)
+                        .background(Color.gray.opacity(0.25), in: RoundedRectangle(cornerRadius: unit * 5))
+                        .contentShape(RoundedRectangle(cornerRadius: unit * 5))
+                }.buttonStyle(.plain).disabled(waterLocked).accessibilityLabel("Settings")
             }
-            #if canImport(ExtraTools)
-            NavigationLink { ExtraToolsRoot() } label: {
-                Image(systemName: ExtraToolsRoot.systemImage).font(.system(size: unit * 9))
-                    .frame(width: side, height: height)
-                    .background(Color.gray.opacity(0.25), in: RoundedRectangle(cornerRadius: unit * 5))
-            }.buttonStyle(.plain).disabled(waterLocked).accessibilityLabel(ExtraToolsRoot.title)
-            #endif
-            NavigationLink { settings() } label: {
-                Image(systemName: "gearshape.fill").font(.system(size: unit * 9))
-                    .frame(width: side, height: height)
-                    .background(Color.gray.opacity(0.25), in: RoundedRectangle(cornerRadius: unit * 5))
-            }.buttonStyle(.plain).disabled(waterLocked).accessibilityLabel("Settings")
+            .frame(height: small)
         }
-        .frame(height: height)
     }
 }
 

@@ -29,7 +29,7 @@ import X6Core
     private var commandTrace: CommandTrace
     var commandReport: String { commandTrace.report }
     var failureReport: String { commandTrace.lastFailureReport }
-    static let diagnosticRevision = "log-transfer-25"
+    static let diagnosticRevision = "two-rows-26"
     @Published private(set) var telemetry = CameraTelemetryDisplay()
     @Published private(set) var telemetryMessage = "Camera readings have not arrived yet."
     @Published private(set) var waterLocked = false
