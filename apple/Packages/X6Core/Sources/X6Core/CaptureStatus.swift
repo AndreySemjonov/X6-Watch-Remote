@@ -40,7 +40,8 @@ public struct CaptureStatus: Equatable, Sendable {
     public let rawState: UInt64?
     public let elapsed: UInt64?
     public var recording: RecordingState {
-        switch rawState { case 0: return .stopped; case 1: return .recording; default: return .unknown }
+        // 24: an X6 recording to internal storage (no SD card), with elapsed counting up.
+        switch rawState { case 0: return .stopped; case 1, 24: return .recording; default: return .unknown }
     }
     public init(rawState: UInt64?, elapsed: UInt64?) { self.rawState = rawState; self.elapsed = elapsed }
     public static func decodeResponse(_ bytes: [UInt8]) throws -> CaptureStatus {
