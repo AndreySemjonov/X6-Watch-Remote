@@ -37,6 +37,9 @@ final class CoreTests: XCTestCase {
     func testCaptureAndUnknownStates() throws {
         let status = try CaptureStatus.decodeResponse([UInt8](hex: "0a06080110085000"))
         XCTAssertEqual(status.recording, .recording); XCTAssertEqual(status.elapsed, 8)
+        // Real X6 recording to internal storage, 4 s in.
+        let onInternal = try CaptureStatus.decodeResponse([UInt8](hex: "0a06081810045000"))
+        XCTAssertEqual(onInternal.recording, .recording); XCTAssertEqual(onInternal.elapsed, 4)
         XCTAssertEqual(try CaptureStatus.decodeResponse([UInt8](hex: "0a02084f")).recording, .unknown)
         XCTAssertEqual(try CaptureStatus.decodeResponse([UInt8](hex: "0a00")).recording, .unknown)
         XCTAssertThrowsError(try CaptureStatus.decodeResponse([]))
